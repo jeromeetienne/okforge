@@ -16,6 +16,25 @@ target's `.claude/` by `okforge install`); its deterministic mechanics live in
 [`src/`](src) as a small TypeScript CLI. The model writes the prose; the CLI
 answers "what is each folder derived from?" and "is the bundle still well-formed?".
 
+## How to install
+
+Run `install` from the root of the repository you want to add OKF to (Node >=
+20.12, no install step — `npx` fetches it):
+
+```bash
+npx okforge install .claude
+```
+
+When the destination folder is named `.claude`, this drops the skill prose into
+`.claude/skills/okf/` **and** registers the `npx okforge nudge` Stop hook in
+`.claude/settings.json` (idempotent and non-destructive — existing settings and
+hooks are preserved). For any other destination it copies the skill only and
+leaves `settings.json` untouched.
+
+Then write an `.okforge.config.json` at the project root describing that repo's
+folder-to-source mapping (see [`.okforge.config.json`](#usable-in-any-repository-okforgeconfigjson)
+below), and ask Claude to "set up okf" — or run `/okf` — to scaffold the bundle.
+
 ## Why a skill
 
 The `okf/` bundle is **derived** from source — each folder is generated from
@@ -138,22 +157,6 @@ dotclaude_folder/           data shipped to a target's .claude/ by `okforge inst
   paths (`../../packages/...`).
 - Ground every claim in real source. Do not invent fields, routes, flags, or
   states; if uncertain, omit.
-
-## Reusing this in another project
-
-```bash
-npx okforge install .claude
-```
-
-When the destination folder is named `.claude`, `install` both drops the skill
-prose into `.claude/skills/okf/` **and** registers the `npx okforge nudge` Stop
-hook in `.claude/settings.json` (idempotent and non-destructive — existing
-settings and hooks are preserved). For any other destination it copies the skill
-only and leaves `settings.json` untouched.
-
-Then write an `.okforge.config.json` at the project root describing that repo's
-folder-to-source mapping. The mapping is the only project-specific part — both the
-skill and the nudge read it from there.
 
 ## License
 
