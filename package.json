@@ -1,0 +1,47 @@
+{
+	"name": "okforge",
+	"version": "1.0.0",
+	"description": "Open Knowledge Format (OKF) skill for Claude Code — deterministic okf bundle mechanics and a Stop-hook nudge.",
+	"type": "module",
+	"bin": {
+		"okforge": "dist/cli.js"
+	},
+	"main": "dist/cli.js",
+	"types": "dist/cli.d.ts",
+	"files": [
+		"dist",
+		".claude"
+	],
+	"engines": {
+		"node": ">=20.12"
+	},
+	"scripts": {
+		"okforge": "tsx src/cli.ts",
+		"typecheck": "tsc --noEmit",
+		"build": "tsc -p tsconfig.build.json",
+		"prepublishOnly": "npm run build",
+		"publish:all": "npm run build && npm version patch && npm publish"
+	},
+	"author": {
+		"name": "Jerome Etienne",
+		"email": "jerome.etienne@gmail.com"
+	},
+	"license": "MIT",
+	"keywords": [
+		"claude-code",
+		"okf",
+		"open-knowledge-format",
+		"knowledge-bundle",
+		"skill"
+	],
+	"dependencies": {
+		"chalk": "^5.3.0",
+		"commander": "^12.1.0",
+		"zod": "^3.23.8"
+	},
+	"devDependencies": {
+		"@types/node": "^22.10.0",
+		"tsx": "^4.19.2",
+		"typescript": "^5.7.2"
+	}
+}
