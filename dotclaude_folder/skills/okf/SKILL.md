@@ -107,9 +107,11 @@ problems if the user asked you to.
 - **Index files** (reserved): `index.md` has NO frontmatter (except the root
   bundle index). It lists the folder's concepts as bulleted markdown links with
   one-line descriptions, optionally grouped under `#` headings.
-- **Links**: cross-link concepts with bundle-relative absolute paths, e.g.
-  `[job store](/runtime_concepts/job_store.md)`. Link to real repo source files
-  (in `# Citations`) with repo-relative paths from the doc, e.g.
+- **Links**: cross-link concepts with relative markdown paths from the doc, e.g.
+  `[job store](../runtime_concepts/job_store.md)` or `[sibling](./sibling.md)`.
+  Never use bundle-root absolute paths (those beginning with `/`, e.g.
+  `/runtime_concepts/job_store.md`). Link to real repo source files (in
+  `# Citations`) with repo-relative paths from the doc, e.g.
   `../../packages/foo/src/model/job_store.ts`.
 - **Grounding (critical)**: every claim must come from the real source you read.
   Do not invent field names, routes, flags, states, or behavior. If uncertain,
