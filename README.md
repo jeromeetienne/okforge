@@ -10,8 +10,9 @@ with a required `type`, and reserved `index.md` / `log.md` files provide listing
 and history. If you can `cat` a file you can read OKF; if you can `git clone` a
 repo you can ship it.
 
-The skill prose lives in [`.claude/skills/okf/`](.claude/skills/okf) (`SKILL.md`
-is the instruction file Claude loads); its deterministic mechanics live in
+The skill prose lives in [`dotclaude_folder/skills/okf/`](dotclaude_folder/skills/okf)
+(`SKILL.md` is the instruction file Claude loads, shipped as data and copied into a
+target's `.claude/` by `okforge install`); its deterministic mechanics live in
 [`src/`](src) as a small TypeScript CLI. The model writes the prose; the CLI
 answers "what is each folder derived from?" and "is the bundle still well-formed?".
 
@@ -119,8 +120,9 @@ src/                        the okforge CLI (mechanics)
     ├── check_command.ts    conformance + dead-link lint
     ├── nudge_command.ts    the Stop-hook nudge
     └── install_command.ts  copy the skill into a target agent folder
-.claude/skills/okf/
-└── SKILL.md                instructions Claude loads
+dotclaude_folder/           data shipped to a target's .claude/ by `okforge install`
+└── skills/okf/
+    └── SKILL.md            instructions Claude loads
 ```
 
 ## Conventions

@@ -36,7 +36,7 @@ export class InstallCommand {
 	 * @returns The destination directory, the per-file outcome, and the hook outcome.
 	 */
 	static install(agentFolder: string): InstallResult {
-		const skillsDir = Path.join(import.meta.dirname, '..', '..', '.claude', 'skills');
+		const skillsDir = Path.join(import.meta.dirname, '..', '..', 'dotclaude_folder', 'skills');
 		if (Fs.existsSync(skillsDir) === false) {
 			throw new Error(`bundled skill files not found at ${skillsDir}`);
 		}

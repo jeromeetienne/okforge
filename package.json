@@ -10,7 +10,7 @@
 	"types": "dist/cli.d.ts",
 	"files": [
 		"dist",
-		".claude/skills",
+		"dotclaude_folder",
 		"LICENSE"
 	],
 	"engines": {
