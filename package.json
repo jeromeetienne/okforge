@@ -10,7 +10,8 @@
 	"types": "dist/cli.d.ts",
 	"files": [
 		"dist",
-		".claude"
+		".claude/skills",
+		"LICENSE"
 	],
 	"engines": {
 		"node": ">=20.12"

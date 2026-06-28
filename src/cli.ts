@@ -9,6 +9,7 @@ import { SourcesCommand } from './commands/sources_command.js';
 import { StaleCommand } from './commands/stale_command.js';
 import { CheckCommand } from './commands/check_command.js';
 import { NudgeCommand } from './commands/nudge_command.js';
+import { InstallCommand } from './commands/install_command.js';
 
 /** Wire up the subcommands and run them. */
 async function main(): Promise<void> {
@@ -92,6 +93,19 @@ async function main(): Promise<void> {
 		.description('Stop-hook companion: read the hook payload on stdin and maybe remind')
 		.action(async () => {
 			await NudgeCommand.nudge();
+		});
+
+	program
+		.command('install')
+		.description('Copy the bundled okf skill into an AI agent folder (e.g. .claude)')
+		.argument('[agent_folder]', 'Destination agent folder', '.')
+		.action((agentFolder: string) => {
+			const result = InstallCommand.install(agentFolder);
+			for (const file of result.files) {
+				console.log(`${Chalk.green(file.action)} ${file.destination}`);
+			}
+			console.log(Chalk.bold(`\n${result.files.length} file(s) → ${result.destinationDir}`));
+			console.log('Next: register `npx okforge nudge` as a Stop hook in .claude/settings.json.');
 		});
 
 	await program.parseAsync(process.argv);
