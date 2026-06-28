@@ -87,7 +87,7 @@ current directory (the repository root).
 | `okforge stale [<dir>]` | List folders whose source changed since HEAD while the folder was not edited. |
 | `okforge check [<dir>]` | Conformance + dead-link lint; exits non-zero on problems. |
 | `okforge nudge` | Stop-hook entry: read the hook payload on stdin and maybe remind. |
-| `okforge install [<agent_folder>]` | Copy the bundled okf skill into an agent folder (default `.`, e.g. `.claude`). |
+| `okforge install [<agent_folder>]` | Copy the bundled okf skill into an agent folder (default `.`); when that folder is named `.claude`, also register the `nudge` Stop hook in its `settings.json`. |
 
 `check` verifies: snake_case names only, every non-index `.md` has a non-empty
 frontmatter `type`, sub-folder `index.md` files carry no frontmatter, and every
@@ -139,11 +139,19 @@ src/                        the okforge CLI (mechanics)
 
 ## Reusing this in another project
 
-The skill is self-contained. Run `npx okforge install <target>/.claude` to drop
-the skill prose into the target, register `npx okforge nudge` as a `Stop` hook in
-its `.claude/settings.json`, and write an `.okforge.config.json` describing the
-target's folder-to-source mapping. The mapping is the only project-specific part —
-both the skill and the nudge read it from there.
+```bash
+npx okforge install .claude
+```
+
+When the destination folder is named `.claude`, `install` both drops the skill
+prose into `.claude/skills/okf/` **and** registers the `npx okforge nudge` Stop
+hook in `.claude/settings.json` (idempotent and non-destructive — existing
+settings and hooks are preserved). For any other destination it copies the skill
+only and leaves `settings.json` untouched.
+
+Then write an `.okforge.config.json` at the project root describing that repo's
+folder-to-source mapping. The mapping is the only project-specific part — both the
+skill and the nudge read it from there.
 
 ## License
 

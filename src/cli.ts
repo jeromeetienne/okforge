@@ -104,8 +104,14 @@ async function main(): Promise<void> {
 			for (const file of result.files) {
 				console.log(`${Chalk.green(file.action)} ${file.destination}`);
 			}
+			if (result.hook.status === 'added') {
+				console.log(`${Chalk.green('hook')} registered \`npx okforge nudge\` in ${result.hook.settingsPath}`);
+			} else if (result.hook.status === 'present') {
+				console.log(`${Chalk.dim('hook')} \`npx okforge nudge\` already registered in ${result.hook.settingsPath}`);
+			} else {
+				console.log(Chalk.dim('hook  skipped (target is not a .claude folder; pass a .claude path to register the Stop hook)'));
+			}
 			console.log(Chalk.bold(`\n${result.files.length} file(s) → ${result.destinationDir}`));
-			console.log('Next: register `npx okforge nudge` as a Stop hook in .claude/settings.json.');
 		});
 
 	await program.parseAsync(process.argv);
