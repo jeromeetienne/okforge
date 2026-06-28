@@ -19,7 +19,6 @@
 		"okforge": "tsx src/cli.ts",
 		"typecheck": "tsc --noEmit",
 		"build": "tsc -p tsconfig.build.json",
-		"prepublishOnly": "npm run build",
 		"publish:all": "npm run build && npm version patch && npm publish"
 	},
 	"author": {
