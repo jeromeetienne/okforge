@@ -2,6 +2,7 @@
 	"folders": {
 		"cli_commands": ["src/cli.ts", "src/commands/"],
 		"runtime_concepts": ["src/misc/"],
-		"config_formats": ["src/misc/okf_store.ts"]
+		"config_formats": ["src/misc/okf_store.ts"],
+		"agent_skills": ["dotclaude_folder/"]
 	}
 }

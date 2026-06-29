@@ -13,7 +13,7 @@ timestamp: 2026-06-29
 npx okforge nudge
 ```
 
-The Stop-hook companion to the okf skill. It reads the hook payload as JSON on
+The Stop-hook companion to the [okforge](../agent_skills/okforge.md) skill. It reads the hook payload as JSON on
 stdin and, when warranted, prints a single non-blocking reminder to refresh the
 affected docs. Registered as a `Stop` hook in `.claude/settings.json` (the
 [install](./install.md) command can register it automatically).

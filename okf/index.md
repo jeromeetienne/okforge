@@ -20,6 +20,7 @@ This bundle documents okforge itself.
 - [cli_commands](./cli_commands/index.md) — the `okforge` subcommands and how the CLI is wired.
 - [runtime_concepts](./runtime_concepts/index.md) — the shared mechanics behind every subcommand.
 - [config_formats](./config_formats/index.md) — the per-repository `.okforge.config.json` format.
+- [agent_skills](./agent_skills/index.md) — the bundled Claude Code skills and their format reference.
 
 ## Conventions
 
