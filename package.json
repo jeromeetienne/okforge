@@ -19,6 +19,7 @@
 	"scripts": {
 		"okforge": "tsx src/cli.ts",
 		"webview:build": "tsx contribs/webview/generate.ts",
+		"webview:deploy": "npm run webview:build && bash scripts/webview_deploy.sh",
 		"symlink:dotclaude": "bash scripts/symlink_dotclaude.sh",
 		"typecheck": "tsc --noEmit",
 		"build": "tsc -p tsconfig.build.json",

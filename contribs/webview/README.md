@@ -45,6 +45,18 @@ Everything is baked in, so no server is required. To serve it over HTTP instead
 npx serve contribs/webview/dist
 ```
 
+## Deploy to GitHub Pages
+
+```bash
+npm run webview:deploy
+```
+
+This rebuilds the site and force-pushes `dist/` to the `gh-pages` branch of
+`origin` as a single fresh commit (the site is a build artifact, not history),
+adding a `.nojekyll` marker so Pages serves it verbatim. Enable Pages once under
+the repo's **Settings → Pages** with branch `gh-pages` and folder `/ (root)`.
+The deploy logic lives in [`scripts/webview_deploy.sh`](../../scripts/webview_deploy.sh).
+
 ## Layout
 
 ```
