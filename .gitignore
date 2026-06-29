@@ -6,3 +6,6 @@ dist/
 
 # Log files
 *.log
+
+# Machine-local Claude Code settings (personal permissions, absolute paths)
+.claude/settings.local.json
