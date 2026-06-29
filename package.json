@@ -18,6 +18,7 @@
 	},
 	"scripts": {
 		"okforge": "tsx src/cli.ts",
+		"webview": "tsx contribs/webview/generate.ts",
 		"symlink:dotclaude": "bash scripts/symlink_dotclaude.sh",
 		"typecheck": "tsc --noEmit",
 		"build": "tsc -p tsconfig.build.json",
