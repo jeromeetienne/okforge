@@ -14,7 +14,7 @@ website stays consistent with `okforge graph` and `okforge check`.
 From the repo root:
 
 ```bash
-npm run webview                 # bundle: ./okf  ->  out: contribs/webview/dist
+npm run webview:build           # bundle: ./okf  ->  out: contribs/webview/dist
 ```
 
 Or run the generator directly, pointing at any bundle and output directory:
