@@ -24,11 +24,11 @@ export type InstallResult = {
 	hook: HookOutcome;
 };
 
-/** `install` — copy the bundled okf skill into an AI agent folder (e.g. `.claude`). */
+/** `install` — copy the bundled okforge skills into an AI agent folder (e.g. `.claude`). */
 export class InstallCommand {
 	/**
-	 * Copy the bundled `skills/okf/` tree into `agentFolder` (the agent directory,
-	 * e.g. `.claude`), preserving the `skills/okf/...` layout. When the destination
+	 * Copy the bundled `skills/` tree into `agentFolder` (the agent directory,
+	 * e.g. `.claude`), preserving the `skills/...` layout. When the destination
 	 * is itself named `.claude`, also register the `npx okforge nudge` Stop hook in
 	 * its `settings.json` (idempotent, non-destructive); otherwise the hook step is
 	 * skipped, since `settings.json` is a `.claude` concept.

@@ -18,6 +18,7 @@
 	},
 	"scripts": {
 		"okforge": "tsx src/cli.ts",
+		"symlink:dotclaude": "bash scripts/symlink_dotclaude.sh",
 		"typecheck": "tsc --noEmit",
 		"build": "tsc -p tsconfig.build.json",
 		"publish:all": "npm run build && npm version patch && npm publish"

@@ -10,6 +10,7 @@ import { StaleCommand } from './commands/stale_command.js';
 import { CheckCommand } from './commands/check_command.js';
 import { NudgeCommand } from './commands/nudge_command.js';
 import { InstallCommand } from './commands/install_command.js';
+import { GraphCommand } from './commands/graph_command.js';
 
 /** Wire up the subcommands and run them. */
 async function main(): Promise<void> {
@@ -86,6 +87,20 @@ async function main(): Promise<void> {
 			}
 			console.error(result.summary);
 			process.exit(1);
+		});
+
+	program
+		.command('graph')
+		.description('Read-only concept-graph queries over an OKF bundle (JSON output for the okforge-browse skill)')
+		.argument('<op>', 'overview | concept <id> | neighbors <id> | orphans | broken | path <a> <b>')
+		.argument('[args...]', 'Operation arguments (Concept IDs)')
+		.option('-b, --bundle <dir>', 'Bundle root directory', '.')
+		.option('-n, --hops <n>', 'Neighbor radius for the neighbors op', '1')
+		.action((op: string, args: string[], options: { bundle: string; hops: string }) => {
+			const root = GraphCommand.resolveRoot(options.bundle);
+			const hops = Number.parseInt(options.hops, 10);
+			const result = GraphCommand.run(op, args, root, Number.isNaN(hops) === true ? 1 : hops);
+			console.log(JSON.stringify(result, null, 2));
 		});
 
 	program

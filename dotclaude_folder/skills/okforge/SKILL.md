@@ -1,5 +1,5 @@
 ---
-name: okf
+name: okforge
 description: >-
   Maintain the Open Knowledge Format (OKF) knowledge bundle under okf/. Use
   whenever the user wants to update, refresh, or regenerate OKF docs, set up an
