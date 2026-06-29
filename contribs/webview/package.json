@@ -1,0 +1,11 @@
+{
+	"name": "okforge-webview",
+	"version": "1.0.0",
+	"description": "Static OKF webview generator and deploy scripts.",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"build": "tsx generate.ts",
+		"deploy": "npm run build && bash ../../scripts/webview_deploy.sh"
+	}
+}
