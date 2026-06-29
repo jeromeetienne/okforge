@@ -1,0 +1,7 @@
+{
+	"folders": {
+		"cli_commands": ["src/cli.ts", "src/commands/"],
+		"runtime_concepts": ["src/misc/"],
+		"config_formats": ["src/misc/okf_store.ts"]
+	}
+}
