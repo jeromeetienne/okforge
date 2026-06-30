@@ -13,7 +13,7 @@ timestamp: 2026-06-29
 npx okforge install [agent_folder]
 ```
 
-Copies the bundled `skills/` tree — the [okforge](../agent_skills/okforge.md) and
+Copies the bundled `skills/` tree — the [okforge_maintain](../agent_skills/okforge_maintain.md) and
 [okforge_query](../agent_skills/okforge_query.md) skills — into an agent folder
 (for example `.claude`), preserving the `skills/...` layout, and prints the
 per-file outcome.

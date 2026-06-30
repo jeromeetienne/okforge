@@ -1,1 +1,0 @@
-../../../dotclaude_folder/skills/okforge/SKILL.md

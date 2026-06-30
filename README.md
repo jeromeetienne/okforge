@@ -42,7 +42,7 @@ leaves `settings.json` untouched.
 
 Then write an `.okforge.config.json` at the project root describing that repo's
 folder-to-source mapping (see [`.okforge.config.json`](#usable-in-any-repository-okforgeconfigjson)
-below), and ask Claude to "set up okf" — or run `/okforge` — to scaffold the bundle.
+below), and ask Claude to "set up okf" — or run `/okforge-maintain` — to scaffold the bundle.
 
 ## Why a skill
 
@@ -61,7 +61,7 @@ Three modes, chosen from how you ask:
 | "the API changed, update okf", "refresh okf for X", "update the OKF docs" | **refresh** | Reads the current source for the affected folder(s) and regenerates only the docs whose source actually changed, grounded in what it read. |
 | "check okf", "is the bundle conformant", "any dead links" | **check** | Runs the conformance and dead-link lint. |
 
-Invoke it by asking Claude in plain language, or with `/okforge`. Regeneration is
+Invoke it by asking Claude in plain language, or with `/okforge-maintain`. Regeneration is
 model-driven, so refresh is a **draft-then-review** loop: the skill rewrites the
 affected docs, you review them, then commit. It will not silently rewrite docs
 whose source did not change.
@@ -136,8 +136,8 @@ npm run symlink:dotclaude      # mirror dotclaude_folder/ into .claude/ as symli
 You can also run the source directly with `npx tsx src/cli.ts <command>`.
 
 `symlink:dotclaude` makes okforge dogfood its own skills: it links each file under
-`dotclaude_folder/` into `.claude/` with a relative symlink, so the `okforge` and
-`okforge-query` skills are live in this repo while their tracked source stays in
+`dotclaude_folder/` into `.claude/` with a relative symlink, so the `okforge-maintain`
+and `okforge-query` skills are live in this repo while their tracked source stays in
 `dotclaude_folder/`. It is idempotent and never overwrites a real file (e.g.
 `.claude/settings.json`).
 
@@ -160,7 +160,7 @@ src/                        the okforge CLI (mechanics)
     └── install_command.ts  copy the skills into a target agent folder
 dotclaude_folder/           data shipped to a target's .claude/ by `okforge install`
 └── skills/
-    ├── okforge/
+    ├── okforge-maintain/
     │   └── SKILL.md        maintain the bundle (scaffold / refresh / check)
     └── okforge-query/
         ├── SKILL.md        read-only browser for any OKF bundle

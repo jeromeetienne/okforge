@@ -1,5 +1,13 @@
 # Change log
 
+## 2026-06-30
+
+- Renamed the `okforge` maintenance skill to `okforge-maintain` for naming
+  symmetry with `okforge-query`. Updated the `agent_skills/okforge` concept doc
+  to `agent_skills/okforge_maintain`, its resource path and cross-links, and the
+  `/okforge-maintain refresh` hint emitted by the `nudge` Stop hook. The CLI
+  package (`npx okforge`) is unchanged.
+
 ## 2026-06-29
 
 - Added the `agent_skills` folder documenting the bundled `okforge` and

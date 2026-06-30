@@ -12,7 +12,7 @@ timestamp: 2026-06-29
 The `okforge-query` skill answers read-only questions about any OKF bundle: its
 structure, concepts, links, hygiene, and history. It never creates, edits, moves,
 or deletes bundle files. It is the companion to the maintenance-oriented
-[okforge](./okforge.md) skill.
+[okforge_maintain](./okforge_maintain.md) skill.
 
 # Tooling strategy
 

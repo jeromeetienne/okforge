@@ -64,7 +64,7 @@ export class NudgeCommand {
 
 		Fs.writeFileSync(marker, '');
 		const folders = stale.map((entry) => entry.folder).join(', ');
-		const message = `Source documented by the OKF bundle changed this session (${folders}) but .okf/ was not updated. Consider running /okforge refresh <folder> to keep the knowledge bundle in sync.`;
+		const message = `Source documented by the OKF bundle changed this session (${folders}) but .okf/ was not updated. Consider running /okforge-maintain refresh <folder> to keep the knowledge bundle in sync.`;
 		process.stdout.write(`${JSON.stringify({ systemMessage: message })}\n`);
 	}
 

@@ -13,7 +13,7 @@ timestamp: 2026-06-29
 npx okforge nudge
 ```
 
-The Stop-hook companion to the [okforge](../agent_skills/okforge.md) skill. It reads the hook payload as JSON on
+The Stop-hook companion to the [okforge_maintain](../agent_skills/okforge_maintain.md) skill. It reads the hook payload as JSON on
 stdin and, when warranted, prints a single non-blocking reminder to refresh the
 affected docs. Registered as a `Stop` hook in `.claude/settings.json` (the
 [install](./install.md) command can register it automatically).
@@ -32,7 +32,7 @@ of these hold:
 - [stale](./stale.md) folders exist (via `OkfStore.staleFolders`).
 
 When it fires it writes the marker and emits a `{ "systemMessage": ... }` JSON
-line naming the stale folders and suggesting `/okforge refresh <folder>`.
+line naming the stale folders and suggesting `/okforge-maintain refresh <folder>`.
 
 A Stop hook must never break the session, so every failure is swallowed silently.
 The folder ↔ source mapping comes from
