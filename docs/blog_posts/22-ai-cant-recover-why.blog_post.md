@@ -6,7 +6,7 @@ Same agent. Same prompt. Same author. The difference wasn't the AI. It was what 
 
 > The complete project is open source: [github.com/jeromeetienne/okforge](https://github.com/jeromeetienne/okforge)
 
-![AI recovers what your code does. Not why. — okforge](images/03-ai-cant-recover-why.png)
+![AI recovers what your code does. Not why. — okforge](images/22-ai-cant-recover-why.png)
 
 ## The experiment
 

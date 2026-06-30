@@ -6,7 +6,7 @@ You gate merges on tests and lint. Doc quality gets a shrug and a hope. That asy
 
 > The complete project is open source: [github.com/jeromeetienne/okforge](https://github.com/jeromeetienne/okforge)
 
-![Doc freshness, green or red — okforge](images/13-docs-current-ci-check.png)
+![Doc freshness, green or red — okforge](images/04-docs-current-ci-check.png)
 
 ## One command, non-zero on problems
 

@@ -6,7 +6,7 @@ Most documentation tooling nags you until you turn it off. Then it's gone, and s
 
 > The complete project is open source: [github.com/jeromeetienne/okforge](https://github.com/jeromeetienne/okforge)
 
-![A reminder you never need to mute — okforge](images/12-reminder-fires-once.png)
+![A reminder you never need to mute — okforge](images/03-reminder-fires-once.png)
 
 ## What the nudge actually does
 

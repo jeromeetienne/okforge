@@ -6,7 +6,7 @@ That sounds like a sales line. It's just what [okforge](https://github.com/jerom
 
 > The complete project is open source: [github.com/jeromeetienne/okforge](https://github.com/jeromeetienne/okforge)
 
-![One command, then you review — okforge](images/10-document-itself-one-command.png)
+![One command, then you review — okforge](images/01-document-itself-one-command.png)
 
 ## The thirty-second version
 

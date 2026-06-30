@@ -16,6 +16,26 @@ target's `.claude/` by `okforge install`); its deterministic mechanics live in
 [`src/`](src) as a small TypeScript CLI. The model writes the prose; the CLI
 answers "what is each folder derived from?" and "is the bundle still well-formed?".
 
+## Blog series
+
+Two short series on okforge — what it does, and the thinking behind it.
+
+**Adoption — a five-step walkthrough, from install to payoff:**
+
+1. [Your Repo Can Document Itself in One Command](docs/blog_posts/01-document-itself-one-command.blog_post.md)
+2. [Documentation Is a Derived Artifact. Configure It Like One.](docs/blog_posts/02-derived-artifact-configure-it.blog_post.md)
+3. [The Best Doc Reminder Fires Once and Shuts Up](docs/blog_posts/03-reminder-fires-once.blog_post.md)
+4. [Make "Are the Docs Current" a CI Check, Not a Vibe](docs/blog_posts/04-docs-current-ci-check.blog_post.md)
+5. [Markdown in Git Beats a Vector Database for Your Own System's Knowledge](docs/blog_posts/05-markdown-git-beats-vector-db.blog_post.md)
+
+**Principles — the why and how behind the design:**
+
+- [The Most Dangerous Documentation Is the Kind You Don't Trust](docs/blog_posts/20-documentation-you-dont-trust.blog_post.md)
+- [Don't Ask a Model What Code Can Compute](docs/blog_posts/21-dont-ask-a-model-what-code-can-compute.blog_post.md)
+- [AI Can Recover What Your Code Does. It Can't Recover Why.](docs/blog_posts/22-ai-cant-recover-why.blog_post.md)
+- [Your Agent's Knowledge Base Is Probably Overengineered](docs/blog_posts/23-knowledge-base-overengineered.blog_post.md)
+- [I Shipped a Dev Tool in Two Days. The Code Was the Easy Part.](docs/blog_posts/24-shipped-in-two-days.blog_post.md)
+
 ## How to install
 
 Run `install` from the root of the repository you want to add OKF to (Node >=

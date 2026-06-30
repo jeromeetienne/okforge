@@ -8,7 +8,7 @@ There's a cleaner line to draw. **Code computes, the model judges.** And once yo
 
 > The complete project is open source: [github.com/jeromeetienne/okforge](https://github.com/jeromeetienne/okforge)
 
-![Code computes. The model judges. — okforge](images/02-dont-ask-a-model-what-code-can-compute.png)
+![Code computes. The model judges. — okforge](images/21-dont-ask-a-model-what-code-can-compute.png)
 
 ## The split, concretely
 

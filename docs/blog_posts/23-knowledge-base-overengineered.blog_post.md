@@ -6,7 +6,7 @@ The reflex right now is automatic. Agent needs context, so you reach for embeddi
 
 > The complete project is open source: [github.com/jeromeetienne/okforge](https://github.com/jeromeetienne/okforge)
 
-![Curated knowledge wants git, not a vector DB — okforge](images/04-knowledge-base-overengineered.png)
+![Curated knowledge wants git, not a vector DB — okforge](images/23-knowledge-base-overengineered.png)
 
 ## What the heavy setup actually costs
 

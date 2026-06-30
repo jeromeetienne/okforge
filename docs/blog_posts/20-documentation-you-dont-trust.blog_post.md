@@ -8,7 +8,7 @@ That was my repos for years. The docs were always a little behind. A renamed fun
 
 > The complete project is open source: [github.com/jeromeetienne/okforge](https://github.com/jeromeetienne/okforge)
 
-![Docs you don't trust are worse than none — okforge](images/01-documentation-you-dont-trust.png)
+![Docs you don't trust are worse than none — okforge](images/20-documentation-you-dont-trust.png)
 
 ## Why this is worse now
 

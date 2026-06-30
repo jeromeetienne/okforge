@@ -8,7 +8,7 @@ That sounds like the headline. It isn't. The headline is what I spent the two da
 
 > The complete project is open source: [github.com/jeromeetienne/okforge](https://github.com/jeromeetienne/okforge)
 
-![AI moved the work. It didn't remove it. — okforge](images/05-shipped-in-two-days.png)
+![AI moved the work. It didn't remove it. — okforge](images/24-shipped-in-two-days.png)
 
 ## What the two days were spent on
 

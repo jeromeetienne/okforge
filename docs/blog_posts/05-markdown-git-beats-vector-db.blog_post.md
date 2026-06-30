@@ -6,7 +6,7 @@ That's the bet [okforge](https://github.com/jeromeetienne/okforge) makes. The do
 
 > The complete project is open source: [github.com/jeromeetienne/okforge](https://github.com/jeromeetienne/okforge)
 
-![A bundle you can cat, clone, and query — okforge](images/14-markdown-git-beats-vector-db.png)
+![A bundle you can cat, clone, and query — okforge](images/05-markdown-git-beats-vector-db.png)
 
 ## The bundle is just files
 

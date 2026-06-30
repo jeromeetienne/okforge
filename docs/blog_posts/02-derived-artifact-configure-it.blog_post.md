@@ -6,7 +6,7 @@ Everything else — the markdown, the staleness checks, the reminders — falls 
 
 > The complete project is open source: [github.com/jeromeetienne/okforge](https://github.com/jeromeetienne/okforge)
 
-![One map, and drift becomes computable — okforge](images/11-derived-artifact-configure-it.png)
+![One map, and drift becomes computable — okforge](images/02-derived-artifact-configure-it.png)
 
 ## The whole config
 

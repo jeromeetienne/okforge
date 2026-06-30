@@ -32,39 +32,39 @@ Not worth a standalone post (used as detail instead): the webview/static-site ge
 
 Order follows the arc: why → how → surprise → vision → meta. Each post stands alone.
 
-### Post 1 — "The most dangerous documentation is the kind you don't trust" (the why)
+### Post 20 — "The most dangerous documentation is the kind you don't trust" (the why)
 - **Hook:** bad docs aren't the problem; docs you've quietly stopped trusting are — you can't tell what's stale, so you ignore all of it.
 - **Synopsis:** docs drift behind code, trust collapses, and in the AI era agents now read those docs and act on stale context. The fix isn't discipline — it's treating docs as a derived artifact with automated maintenance and staleness detection.
 - **Audience:** founders/CTOs. **Assumes:** nothing.
 - **Takeaway:** untrusted docs are worse than none; make freshness a computed property.
 - **Demonstrates:** problem framing.
-- **Leads to:** who maintains freshness automatically? → Post 2.
+- **Leads to:** who maintains freshness automatically? → Post 21.
 
-### Post 2 — "Don't ask a model what code can compute" (the how — spine, likely flagship)
+### Post 21 — "Don't ask a model what code can compute" (the how — spine, likely flagship)
 - **Hook:** everyone's handing whole workflows to an LLM; most of those steps shouldn't touch a model.
 - **Synopsis:** in okforge the model writes prose; deterministic code enforces links, naming, frontmatter, and staleness. The discriminator isn't testability (you can test an LLM) — it's determinism. *Code computes, the model judges.*
 - **Audience:** founders/CTOs + engineers. **Assumes:** rough idea of an LLM/agent.
 - **Takeaway:** split every AI workflow on one line — knowable answer → code, judgment → model.
 - **Demonstrates:** AI-systems design judgment (strongest expertise signal, most shareable).
-- **Leads to:** how well can AI reconstruct knowledge never written down? → Post 3.
+- **Leads to:** how well can AI reconstruct knowledge never written down? → Post 22.
 
-### Post 3 — "AI can recover what your code does. It can't recover why." (the surprise)
+### Post 22 — "AI can recover what your code does. It can't recover why." (the surprise)
 - **Hook:** AI documented one project in minutes; on another it couldn't meaningfully start.
 - **Synopsis:** OKF backfills well (the "what" is latent in code); ADR backfill fails (the "why" is gone and can't be inferred from card, code, or commit). AI reconstructs structure, not lost intent.
 - **Audience:** founders/CTOs + engineers. **Assumes:** nothing (define ADR in one line).
 - **Takeaway:** record intent now — it's the one thing AI can't backfill later.
 - **Demonstrates:** nuance and rigor (ran the comparison, drew the line precisely).
-- **Leads to:** what format should this knowledge live in? → Post 4.
+- **Leads to:** what format should this knowledge live in? → Post 23.
 
-### Post 4 — "Your agent's knowledge base is probably overengineered" (the vision)
+### Post 23 — "Your agent's knowledge base is probably overengineered" (the vision)
 - **Hook:** before standing up a vector database for your own system's knowledge, try a folder of markdown in git.
 - **Synopsis:** for curated knowledge about your own system, a git-native markdown bundle — cat-readable, clone-shippable, version-controlled, human- and agent-readable — beats embedding everything and hoping retrieval works. Honest scoping: not "RAG is dead," just the right tool for curated, authored knowledge.
 - **Audience:** founders/CTOs + engineers building with agents. **Assumes:** has heard of RAG/vector search.
 - **Takeaway:** match the format to the knowledge; curated context wants git and markdown.
 - **Demonstrates:** forward-looking, opinionated, fluent in real agent tooling.
-- **Leads to:** how do you build this fast? → Post 5.
+- **Leads to:** how do you build this fast? → Post 24.
 
-### Post 5 — "I shipped a dev tool in two days. The code was the easy part." (the meta close, optional)
+### Post 24 — "I shipped a dev tool in two days. The code was the easy part." (the meta close, optional)
 - **Hook:** AI wrote most of okforge's code; the job was deciding what not to let it decide.
 - **Synopsis:** short build log — 2 days, solo, ~1,200 lines, live on npm. The work was drawing the line between judgment (model) and deterministic machinery (code): skill-as-distributed-instructions, the gentle once-per-session nudge, the reused graph engine. The tool embodies its own thesis.
 - **Audience:** founders/CTOs, hiring managers. **Assumes:** nothing.
@@ -74,15 +74,15 @@ Order follows the arc: why → how → surprise → vision → meta. Each post s
 
 ## Self-critique (Phase 4)
 
-- **Overlap 2↔5** (model-vs-code): kept distinct — Post 2 is the transferable principle; Post 5 is the personal build story. Different altitude.
-- **Overlap 1↔4** (docs for AI): Post 1 is maintenance/trust; Post 4 is format/consumption. Distinct.
-- **Overclaim in Post 4:** explicitly scoped away from "RAG is dead" to stay credible.
-- **Cut for cause:** webview, nudge internals, install mechanics — folded into Post 5, never their own thin posts.
-- **Sequencing:** publish in order for the arc; or lead with Post 2 for maximum impact (most shareable). Both work since posts are standalone.
+- **Overlap 21↔24** (model-vs-code): kept distinct — post 21 is the transferable principle; post 24 is the personal build story. Different altitude.
+- **Overlap 20↔23** (docs for AI): post 20 is maintenance/trust; post 23 is format/consumption. Distinct.
+- **Overclaim in post 23:** explicitly scoped away from "RAG is dead" to stay credible.
+- **Cut for cause:** webview, nudge internals, install mechanics — folded into post 24, never their own thin posts.
+- **Sequencing:** publish in order for the arc; or lead with post 21 for maximum impact (most shareable). Both work since posts are standalone.
 
 ## Recommendation
 
-Ship all 5. Posts 1–4 are a complete series; Post 5 is the optional bonus where the hiring signal lands — keep it.
+Ship all 5. Posts 20–23 are a complete series; post 24 is the optional bonus where the hiring signal lands — keep it.
 
 ## Related
 
