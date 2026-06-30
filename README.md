@@ -16,15 +16,6 @@ target's `.claude/` by `okforge install`); its deterministic mechanics live in
 [`src/`](src) as a small TypeScript CLI. The model writes the prose; the CLI
 answers "what is each folder derived from?" and "is the bundle still well-formed?".
 
-## Blog series
-
-A four-part series on the ideas behind okforge — keeping knowledge in sync with code:
-
-1. [The Faster AI Writes Code, the Faster Your Docs Rot](docs/blog_posts/post-1-the-faster-ai-writes-code-the-faster-your-docs-rot.md) — AI-accelerated coding compounds knowledge debt; treat documentation as derived state, not hand-maintained prose.
-2. [Give the Model Less](docs/blog_posts/post-2-give-the-model-less.md) — reliability comes from drawing the model/deterministic boundary deliberately, and drawing it small.
-3. [Don't Make It Remember, Make It Read](docs/blog_posts/post-3-dont-make-it-remember-make-it-read.md) — grounding output in real source; hallucination is a design failure, not a model failure.
-4. [Bet on Boring Formats](docs/blog_posts/post-4-bet-on-boring-formats.md) — why okforge ships plain markdown, an open spec, and an installable skill instead of a clever app.
-
 ## How to install
 
 Run `install` from the root of the repository you want to add OKF to (Node >=
