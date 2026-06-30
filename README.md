@@ -20,7 +20,7 @@ answers "what is each folder derived from?" and "is the bundle still well-formed
 
 Two short series on okforge — what it does, and the thinking behind it.
 
-**Adoption — a five-step walkthrough, from install to payoff:**
+**Workflow — a five-step walkthrough, from install to payoff:**
 
 1. [Your Repo Can Document Itself in One Command](docs/blog_posts/01-document-itself-one-command.blog_post.md)
 2. [Documentation Is a Derived Artifact. Configure It Like One.](docs/blog_posts/02-derived-artifact-configure-it.blog_post.md)
