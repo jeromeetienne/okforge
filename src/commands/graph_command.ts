@@ -7,7 +7,7 @@ const HUB_LIMIT = 10;
 
 /**
  * `graph` — read-only concept-graph queries over an OKF bundle, emitted as JSON
- * for the okforge-browse skill to format. Builds the graph once (via {@link OkfGraph})
+ * for the okforge-query skill to format. Builds the graph once (via {@link OkfGraph})
  * and answers overview / concept / neighbors / orphans / broken / path. The skill
  * works without this command (falling back to Glob/Grep/Read); it is here so the
  * graph-heavy queries can be answered deterministically.

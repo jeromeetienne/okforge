@@ -1,15 +1,15 @@
 ---
 type: Reference
 title: OKF v0.1 rules
-description: The format-rules reference bundled with okforge-browse — Concept IDs, reserved files, link resolution, hygiene.
-resource: dotclaude_folder/skills/okforge-browse/references/okf-rules.md
+description: The format-rules reference bundled with okforge-query — Concept IDs, reserved files, link resolution, hygiene.
+resource: dotclaude_folder/skills/okforge-query/references/okf-rules.md
 tags: [reference, okf, spec]
 timestamp: 2026-06-29
 ---
 
 # Overview
 
-The detail behind the [okforge_browse](./okforge_browse.md) skill, read when a
+The detail behind the [okforge_query](./okforge_query.md) skill, read when a
 link does not resolve as expected, when classifying files, or when reporting
 hygiene. The authoritative source is `okf/SPEC.md` in
 `github.com/GoogleCloudPlatform/knowledge-catalog`; OKF is v0.1 and where the
@@ -56,4 +56,4 @@ and `broken` operations, implemented in
 
 # Citations
 
-- [`dotclaude_folder/skills/okforge-browse/references/okf-rules.md`](../../dotclaude_folder/skills/okforge-browse/references/okf-rules.md)
+- [`dotclaude_folder/skills/okforge-query/references/okf-rules.md`](../../dotclaude_folder/skills/okforge-query/references/okf-rules.md)

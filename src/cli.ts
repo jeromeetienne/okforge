@@ -91,7 +91,7 @@ async function main(): Promise<void> {
 
 	program
 		.command('graph')
-		.description('Read-only concept-graph queries over an OKF bundle (JSON output for the okforge-browse skill)')
+		.description('Read-only concept-graph queries over an OKF bundle (JSON output for the okforge-query skill)')
 		.argument('<op>', 'overview | concept <id> | neighbors <id> | orphans | broken | path <a> <b>')
 		.argument('[args...]', 'Operation arguments (Concept IDs)')
 		.option('-b, --bundle <dir>', 'Bundle root directory', '.')

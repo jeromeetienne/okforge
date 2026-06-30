@@ -1,15 +1,15 @@
 ---
 type: Skill
-title: okforge-browse skill
+title: okforge-query skill
 description: Strictly read-only Claude Code skill for browsing, mapping, and navigating any OKF bundle.
-resource: dotclaude_folder/skills/okforge-browse/SKILL.md
+resource: dotclaude_folder/skills/okforge-query/SKILL.md
 tags: [skill, claude-code, browse, read-only]
 timestamp: 2026-06-29
 ---
 
 # Overview
 
-The `okforge-browse` skill answers read-only questions about any OKF bundle: its
+The `okforge-query` skill answers read-only questions about any OKF bundle: its
 structure, concepts, links, hygiene, and history. It never creates, edits, moves,
 or deletes bundle files. It is the companion to the maintenance-oriented
 [okforge](./okforge.md) skill.
@@ -48,4 +48,4 @@ files.
 
 # Citations
 
-- [`dotclaude_folder/skills/okforge-browse/SKILL.md`](../../dotclaude_folder/skills/okforge-browse/SKILL.md)
+- [`dotclaude_folder/skills/okforge-query/SKILL.md`](../../dotclaude_folder/skills/okforge-query/SKILL.md)

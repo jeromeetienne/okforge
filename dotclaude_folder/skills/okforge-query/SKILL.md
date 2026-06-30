@@ -1,5 +1,5 @@
 ---
-name: okforge-browse
+name: okforge-query
 description: >-
   Read-only browser for any Open Knowledge Format (OKF) knowledge bundle — a tree
   of markdown concept files. Use it whenever the user wants to browse, explore, map,

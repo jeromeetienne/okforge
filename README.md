@@ -115,7 +115,7 @@ current directory (the repository root).
 | `okforge sources <folder> [<dir>]` | Print the source paths a folder is derived from. |
 | `okforge stale [<dir>]` | List folders whose source changed since HEAD while the folder was not edited. |
 | `okforge check [<dir>]` | Conformance + dead-link lint; exits non-zero on problems. |
-| `okforge graph <op> [args] [--bundle <dir>]` | Read-only concept-graph queries over a bundle (`overview`, `concept`, `neighbors`, `orphans`, `broken`, `path`), as JSON; powers the `okforge-browse` skill. |
+| `okforge graph <op> [args] [--bundle <dir>]` | Read-only concept-graph queries over a bundle (`overview`, `concept`, `neighbors`, `orphans`, `broken`, `path`), as JSON; powers the `okforge-query` skill. |
 | `okforge nudge` | Stop-hook entry: read the hook payload on stdin and maybe remind. |
 | `okforge install [<agent_folder>]` | Copy the bundled okf skill into an agent folder (default `.`); when that folder is named `.claude`, also register the `nudge` Stop hook in its `settings.json`. |
 
@@ -137,7 +137,7 @@ You can also run the source directly with `npx tsx src/cli.ts <command>`.
 
 `symlink:dotclaude` makes okforge dogfood its own skills: it links each file under
 `dotclaude_folder/` into `.claude/` with a relative symlink, so the `okforge` and
-`okforge-browse` skills are live in this repo while their tracked source stays in
+`okforge-query` skills are live in this repo while their tracked source stays in
 `dotclaude_folder/`. It is idempotent and never overwrites a real file (e.g.
 `.claude/settings.json`).
 
@@ -155,14 +155,14 @@ src/                        the okforge CLI (mechanics)
     ├── sources_command.ts  print a folder's source paths
     ├── stale_command.ts    folders whose source changed since HEAD
     ├── check_command.ts    conformance + dead-link lint
-    ├── graph_command.ts    concept-graph queries for the okforge-browse skill
+    ├── graph_command.ts    concept-graph queries for the okforge-query skill
     ├── nudge_command.ts    the Stop-hook nudge
     └── install_command.ts  copy the skills into a target agent folder
 dotclaude_folder/           data shipped to a target's .claude/ by `okforge install`
 └── skills/
     ├── okforge/
     │   └── SKILL.md        maintain the bundle (scaffold / refresh / check)
-    └── okforge-browse/
+    └── okforge-query/
         ├── SKILL.md        read-only browser for any OKF bundle
         └── references/okf-rules.md   OKF v0.1 rules the browser encodes
 ```

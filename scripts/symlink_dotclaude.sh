@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # Mirror dotclaude_folder/ into .claude/ as a tree of relative symlinks, so the
-# okforge and okforge-browse skills are live in this repo's own .claude/ while their
+# okforge and okforge-query skills are live in this repo's own .claude/ while their
 # tracked source stays in dotclaude_folder/. Idempotent: existing symlinks are
 # refreshed, real files (e.g. .claude/settings.json) are left untouched.
 

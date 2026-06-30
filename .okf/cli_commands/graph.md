@@ -14,7 +14,7 @@ npx okforge graph <op> [args...] [--bundle <dir>] [--hops <n>]
 ```
 
 Answers concept-graph queries over a bundle and prints the result as pretty
-JSON, for the [okforge_browse](../agent_skills/okforge_browse.md) skill to format.
+JSON, for the [okforge_query](../agent_skills/okforge_query.md) skill to format.
 
 # Arguments and options
 

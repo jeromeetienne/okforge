@@ -37,7 +37,7 @@ Reads the mapping from
 
 It also relies on the [nudge](../cli_commands/nudge.md) Stop hook to remind when
 source drifts. Its companion read-only skill is
-[okforge_browse](./okforge_browse.md).
+[okforge_query](./okforge_query.md).
 
 # Authoring rules (enforced by the skill)
 
