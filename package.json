@@ -21,7 +21,7 @@
 		"symlink:dotclaude": "bash scripts/symlink_dotclaude.sh",
 		"webview:build": "cd contribs/webview && npm run build",
 		"webview:deploy": "cd contribs/webview && npm run deploy",
-		"webview:open": "cd contribs/webview && npm run build && open dist/index.html",
+		"webview:open": "cd contribs/webview && npm run open",
 		"typecheck": "tsc --noEmit",
 		"build": "tsc -p tsconfig.build.json",
 		"publish:all": "npm run build && npm version patch && npm publish"

@@ -6,6 +6,7 @@
 	"private": true,
 	"scripts": {
 		"build": "tsx src/generate.ts",
+		"open": "npm run build && open dist/index.html",
 		"deploy": "npm run build && bash ../../scripts/webview_deploy.sh"
 	}
 }
