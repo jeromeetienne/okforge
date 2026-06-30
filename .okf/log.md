@@ -2,6 +2,10 @@
 
 ## 2026-06-30
 
+- Added the `contribs` folder documenting the `okforge-webview` static-site
+  generator; mapped it to `contribs/webview/` in `.okforge.config.json` and
+  cross-linked it to the `graph` and `check` command docs and the `OkfGraph`
+  runtime concept it reuses.
 - Renamed the `okforge` maintenance skill to `okforge-maintain` for naming
   symmetry with `okforge-query`. Updated the `agent_skills/okforge` concept doc
   to `agent_skills/okforge_maintain`, its resource path and cross-links, and the
