@@ -1,7 +1,7 @@
 # okforge — Open Knowledge Format bundle skill
 
 A Claude Code skill for maintaining a repository's [Open Knowledge Format](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md)
-(OKF) knowledge bundle under `okf/`, usable in any repository.
+(OKF) knowledge bundle under `.okf/`, usable in any repository.
 
 OKF is an open, human- and agent-friendly format for **knowledge** — the
 metadata, context, and curated insight that surrounds a system. A bundle is a
@@ -46,7 +46,7 @@ below), and ask Claude to "set up okf" — or run `/okforge` — to scaffold the
 
 ## Why a skill
 
-The `okf/` bundle is **derived** from source — each folder is generated from
+The `.okf/` bundle is **derived** from source — each folder is generated from
 specific files, so when those files change the docs drift. The hard parts to keep
 consistent are the OKF format, the folder-to-source mapping, and link integrity.
 The skill keeps those uniform so you can focus on accurate prose.
@@ -57,7 +57,7 @@ Three modes, chosen from how you ask:
 
 | You say | Mode | What happens |
 |---|---|---|
-| "set up okf", "create an OKF bundle", bundle missing | **scaffold** | Creates `.okforge.config.json`, `okf/index.md` (root, with `okf_version`), `okf/log.md`, the folders from the mapping, and refreshes each. |
+| "set up okf", "create an OKF bundle", bundle missing | **scaffold** | Creates `.okforge.config.json`, `.okf/index.md` (root, with `okf_version`), `.okf/log.md`, the folders from the mapping, and refreshes each. |
 | "the API changed, update okf", "refresh okf for X", "update the OKF docs" | **refresh** | Reads the current source for the affected folder(s) and regenerates only the docs whose source actually changed, grounded in what it read. |
 | "check okf", "is the bundle conformant", "any dead links" | **check** | Runs the conformance and dead-link lint. |
 
@@ -70,16 +70,16 @@ whose source did not change.
 
 A companion `Stop` hook, `npx okforge nudge` (registered in
 `.claude/settings.json`), reminds you when a session changed source that an OKF
-folder documents but left `okf/` untouched. It is deliberately gentle:
-non-blocking, at most once per session, and silent if you already touched `okf/`
+folder documents but left `.okf/` untouched. It is deliberately gentle:
+non-blocking, at most once per session, and silent if you already touched `.okf/`
 that session. It reads the same mapping the skill uses (via `npx okforge stale`),
 so the skill and the nudge never diverge.
 
 ## Where the bundle lives
 
-The bundle is the `okf/` directory at the repository root — a valid OKF bundle is
+The bundle is the `.okf/` directory at the repository root — a valid OKF bundle is
 just a subdirectory of a larger repo, so there is no build step or manifest beyond
-`okf_version` in the root `okf/index.md`. The folder-to-source mapping lives next
+`okf_version` in the root `.okf/index.md`. The folder-to-source mapping lives next
 to it in `.okforge.config.json` at the project root.
 
 ## Usable in any repository: `.okforge.config.json`
@@ -174,7 +174,7 @@ dotclaude_folder/           data shipped to a target's .claude/ by `okforge inst
   `type`, then structural markdown (headings, lists, tables, code) using the
   conventional `# Schema` / `# Examples` / `# Citations` sections where they apply.
 - `index.md` is reserved and carries no frontmatter — except the root
-  `okf/index.md`, which declares `okf_version: "0.1"` and `type: Bundle Index`.
+  `.okf/index.md`, which declares `okf_version: "0.1"` and `type: Bundle Index`.
 - Cross-link concepts with bundle-relative absolute paths
   (`/runtime_concepts/job_store.md`); cite real source files with repo-relative
   paths (`../../packages/...`).

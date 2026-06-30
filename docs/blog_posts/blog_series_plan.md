@@ -113,7 +113,7 @@ okforge dogfoods on a second, real project: **`issue_autofix`** (a Claude Code p
   3. In the repo, not a database: knowledge travels with the code, versions with it, reviews in the same PR; `git clone` = you have the knowledge.
   4. Open spec (OKF) over a silo: betting on an open format means interop — other tools and agents can read it. (Adopting an existing open spec, not inventing a silo.)
   5. Skill, not SaaS: `npx okforge install` drops the skill into `.claude/` and registers the nudge hook — no signup, no server. Capability you install, not a service you rent.
-  6. The last mile: the gentle nudge (Stop hook) — reminds only when docs drifted, once per session, non-blocking, silent if you touched `okf/`. Behavioral design that builds a habit without nagging.
+  6. The last mile: the gentle nudge (Stop hook) — reminds only when docs drifted, once per session, non-blocking, silent if you touched `.okf/`. Behavioral design that builds a habit without nagging.
   7. Proof: `issue_autofix` dogfooding — a real second repo with a real bundle.
   8. Lessons learned + where it goes next.
   9. CTA: try okforge.

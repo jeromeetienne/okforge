@@ -46,7 +46,7 @@ progressive disclosure rather than reading everything.
 
 If the user gives a path, use it. Otherwise find the directory holding a root
 `index.md` (ideally with `okf_version: "0.1"` in frontmatter): `Glob **/index.md`,
-then prefer the shallowest, or grep for `okf_version`. A common location is `okf/`.
+then prefer the shallowest, or grep for `okf_version`. A common location is `.okf/` (or `okf/`).
 
 ## Operations
 

@@ -32,7 +32,7 @@ This is the test I'd apply to any knowledge tool you're evaluating: turn the too
 
 ## In the Repo, Not in a Service
 
-The bundle lives at `okf/` in the repository root. No build step, no manifest, no server — just a folder of files next to your code.
+The bundle lives at `.okf/` in the repository root. No build step, no manifest, no server — just a folder of files next to your code.
 
 That placement does more work than it looks like. Knowledge that lives in the repo *travels* with the code (one `git clone` gets you both), *versions* with it (the docs change in the same commit as the code that changed), and *reviews* with it (the doc diff is right there in the pull request, next to the diff that made it necessary). A separate knowledge service is a second source of truth, and a second source of truth starts drifting from the first the instant you create it. Same repo means same lifecycle — which is the whole [Part 1](post-1-the-faster-ai-writes-code-the-faster-your-docs-rot.md) thesis made physical: derived state should live right next to the source it's derived from.
 
@@ -66,7 +66,7 @@ A capability you install beats a service you rent on every axis that matters for
 
 A capability nobody runs is worthless, and the hard part of fresh docs was never the tooling — it's *remembering*. You fix the bug, you ship the code, and updating the knowledge is the step that quietly never happens.
 
-So okforge closes the loop with behavioral design instead of nagging. A `Stop` hook watches each session and nudges you only when it actually matters: source changed that a folder documents, and you didn't touch `okf/`. It fires **at most once per session**, it's **non-blocking**, and it's **completely silent if you already did the work**. It reads the same source→knowledge mapping the skill uses, so the tool and the reminder can never disagree.
+So okforge closes the loop with behavioral design instead of nagging. A `Stop` hook watches each session and nudges you only when it actually matters: source changed that a folder documents, and you didn't touch `.okf/`. It fires **at most once per session**, it's **non-blocking**, and it's **completely silent if you already did the work**. It reads the same source→knowledge mapping the skill uses, so the tool and the reminder can never disagree.
 
 The restraint is the entire design. Over-nagging trains people to ignore you — a reminder that fires when there's nothing to do is a reminder you'll soon mute. The gentle nudge spends your attention only when there's something real to fix, which is exactly why it keeps working. That's the difference between a tool you install and forget and one that quietly builds a habit. The last mile of any dev tool isn't capability; it's the design that gets it used without resentment.
 

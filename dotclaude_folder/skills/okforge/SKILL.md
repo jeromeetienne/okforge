@@ -1,21 +1,21 @@
 ---
 name: okforge
 description: >-
-  Maintain the Open Knowledge Format (OKF) knowledge bundle under okf/. Use
+  Maintain the Open Knowledge Format (OKF) knowledge bundle under .okf/. Use
   whenever the user wants to update, refresh, or regenerate OKF docs, set up an
   OKF bundle, check OKF conformance, or when source code that the bundle
   documents (config schemas, web API routes, CLI commands, runtime subsystems,
   example crews, ADRs) has changed and the docs need to catch up. Three modes:
   scaffold (create the bundle), refresh (regenerate a folder's docs from current
   source), and check (conformance and dead-link lint). Prefer this skill over
-  hand-editing okf/ so the format, the folder<->source mapping, and link
+  hand-editing .okf/ so the format, the folder<->source mapping, and link
   integrity stay consistent.
 ---
 
 # Open Knowledge Format (OKF) maintenance
 
 OKF is an open, human- and agent-friendly format for knowledge — the metadata
-and curated insight that surrounds a system. This repo's bundle lives at `okf/`.
+and curated insight that surrounds a system. This repo's bundle lives at `.okf/`.
 Spec: https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md
 
 The bundle is **derived** from source. Each folder is generated from specific
@@ -73,16 +73,16 @@ too). When the codebase moves, edit `.okforge.config.json`.
    folder `index.md`. If a new source appeared, add a new concept doc and link
    it from `index.md`.
 5. Update the folder `index.md`, and if folders were added/removed update the
-   root `okf/index.md`, the `.okforge.config.json` mapping, and prepend a dated
-   entry to `okf/log.md`.
+   root `.okf/index.md`, the `.okforge.config.json` mapping, and prepend a dated
+   entry to `.okf/log.md`.
 6. Run `npx okforge check` and resolve every problem it reports before finishing.
 
 ## Scaffold mode
 
 Create `.okforge.config.json` at the project root with the folder<->source
 mapping for this repository (ask the user or infer it from the layout). Then
-create `okf/index.md` (the only file with frontmatter: `okf_version: "0.1"` and
-`type: Bundle Index`) and `okf/log.md`. Create the folders from the mapping and
+create `.okf/index.md` (the only file with frontmatter: `okf_version: "0.1"` and
+`type: Bundle Index`) and `.okf/log.md`. Create the folders from the mapping and
 refresh each. Finish with `npx okforge check`.
 
 ## Check mode
@@ -121,6 +121,6 @@ problems if the user asked you to.
 ## Companion hook
 
 A `Stop` hook (`npx okforge nudge`, registered in `.claude/settings.json`) nudges
-at session end when mapped source changed but `okf/` was not updated. It reads the
+at session end when mapped source changed but `.okf/` was not updated. It reads the
 same `.okforge.config.json` mapping via `npx okforge stale`, so editing the
 mapping updates both the skill and the nudge.

@@ -17,9 +17,9 @@ export type HookInput = z.infer<typeof HookInputSchema>;
 
 /**
  * Stop-hook companion to the okf skill. When a session changed source that an OKF
- * folder is derived from but left `okf/` untouched, it prints a gentle,
+ * folder is derived from but left `.okf/` untouched, it prints a gentle,
  * non-blocking reminder to refresh the affected docs. It fires at most once per
- * session and stays silent when `okf/` was already touched. The folder <-> source
+ * session and stays silent when `.okf/` was already touched. The folder <-> source
  * mapping lives in the repository's `.okforge.config.json`, so the hook and the
  * skill read a single source of truth.
  */
@@ -46,14 +46,14 @@ export class NudgeCommand {
 		const sessionId = input.session_id !== undefined && input.session_id !== '' ? input.session_id : 'nosession';
 		const marker = Path.join(Os.tmpdir(), `claude-okf-nudge-${sessionId}`);
 
-		// Already nudged this session, not a git repo, or okf/ already being touched.
+		// Already nudged this session, not a git repo, or .okf/ already being touched.
 		if (Fs.existsSync(marker) === true) {
 			return;
 		}
 		if (OkfStore.isGitRepo(cwd) === false) {
 			return;
 		}
-		if (OkfStore.git(['status', '--porcelain', '--', 'okf'], cwd) !== '') {
+		if (OkfStore.git(['status', '--porcelain', '--', '.okf'], cwd) !== '') {
 			return;
 		}
 
@@ -64,7 +64,7 @@ export class NudgeCommand {
 
 		Fs.writeFileSync(marker, '');
 		const folders = stale.map((entry) => entry.folder).join(', ');
-		const message = `Source documented by the OKF bundle changed this session (${folders}) but okf/ was not updated. Consider running /okforge refresh <folder> to keep the knowledge bundle in sync.`;
+		const message = `Source documented by the OKF bundle changed this session (${folders}) but .okf/ was not updated. Consider running /okforge refresh <folder> to keep the knowledge bundle in sync.`;
 		process.stdout.write(`${JSON.stringify({ systemMessage: message })}\n`);
 	}
 

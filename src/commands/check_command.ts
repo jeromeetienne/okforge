@@ -6,12 +6,12 @@ export type CheckResult = {
 	summary: string;
 };
 
-/** `check` — conformance + dead-link lint of the `okf/` bundle. */
+/** `check` — conformance + dead-link lint of the `.okf/` bundle. */
 export class CheckCommand {
 	/**
 	 * Lint the bundle under `cwd`. Returns the problems and a summary line:
 	 * `OK: N concept docs conformant` when clean, `FAILED: N problem(s)` otherwise.
-	 * Throws when there is no `okf/` bundle.
+	 * Throws when there is no `.okf/` bundle.
 	 */
 	static check(cwd: string): CheckResult {
 		const problems = OkfStore.check(cwd);

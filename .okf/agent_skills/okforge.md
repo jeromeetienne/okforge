@@ -1,7 +1,7 @@
 ---
 type: Skill
 title: okforge skill
-description: Claude Code skill that maintains the OKF bundle under okf/ — scaffold, refresh, and check.
+description: Claude Code skill that maintains the OKF bundle under .okf/ — scaffold, refresh, and check.
 resource: dotclaude_folder/skills/okforge/SKILL.md
 tags: [skill, claude-code, maintenance]
 timestamp: 2026-06-29
@@ -9,9 +9,9 @@ timestamp: 2026-06-29
 
 # Overview
 
-The `okforge` skill maintains the Open Knowledge Format bundle under `okf/`. It
+The `okforge` skill maintains the Open Knowledge Format bundle under `.okf/`. It
 owns the prose while the [CLI commands](../cli_commands/index.md) own the
-deterministic mechanics. Prefer it over hand-editing `okf/` so the format, the
+deterministic mechanics. Prefer it over hand-editing `.okf/` so the format, the
 folder ↔ source mapping, and link integrity stay consistent.
 
 # Modes

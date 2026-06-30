@@ -150,7 +150,7 @@ const program = new Command();
 program
 	.name('okforge-webview')
 	.description('Generate a static website to browse an OKF bundle')
-	.option('-b, --bundle <dir>', 'bundle root directory', Path.join(SCRIPT_DIR, '..', '..', 'okf'))
+	.option('-b, --bundle <dir>', 'bundle root directory', Path.join(SCRIPT_DIR, '..', '..', '.okf'))
 	.option('-o, --out <dir>', 'output directory', Path.join(SCRIPT_DIR, 'dist'))
 	.action((options: { bundle: string; out: string }) => {
 		WebviewGenerator.run(options.bundle, options.out);

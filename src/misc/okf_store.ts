@@ -6,6 +6,9 @@ import { z } from 'zod';
 /** Config file name read from the repository root. */
 const CONFIG_FILENAME = '.okforge.config.json';
 
+/** Directory name of the OKF bundle at the repository root. */
+const BUNDLE_DIRNAME = '.okf';
+
 /**
  * The okforge config: the folder <-> source mapping for a repository. Each key
  * is an OKF concept folder; each value is the list of source path prefixes that
@@ -134,7 +137,7 @@ export class OkfStore {
 		}
 		const stale: StaleFolder[] = [];
 		for (const folder of folders) {
-			if (OkfStore.git(['status', '--porcelain', '--', `okf/${folder}`], cwd) !== '') {
+			if (OkfStore.git(['status', '--porcelain', '--', `${BUNDLE_DIRNAME}/${folder}`], cwd) !== '') {
 				continue;
 			}
 			const source = OkfStore.firstMatch(changed, config.folders[folder]);
@@ -160,15 +163,15 @@ export class OkfStore {
 	}
 
 	/**
-	 * Conformance + dead-link lint of the `okf/` bundle under `cwd`. Returns the
+	 * Conformance + dead-link lint of the `.okf/` bundle under `cwd`. Returns the
 	 * list of problems (empty when conformant); throws when there is no bundle.
 	 * Needs no mapping — it lints the bundle's markdown alone, so it is fully
 	 * repository-agnostic.
 	 */
 	static check(cwd: string): string[] {
-		const root = Path.join(cwd, 'okf');
+		const root = Path.join(cwd, BUNDLE_DIRNAME);
 		if (Fs.existsSync(root) === false || Fs.statSync(root).isDirectory() === false) {
-			throw new Error(`no okf/ bundle at ${root}`);
+			throw new Error(`no ${BUNDLE_DIRNAME}/ bundle at ${root}`);
 		}
 		const problems: string[] = [];
 		const entries = OkfStore.walk(root);
@@ -219,7 +222,7 @@ export class OkfStore {
 
 	/** The count of concept docs (non-index, non-log `.md`) in the bundle under `cwd`. */
 	static conceptCount(cwd: string): number {
-		const root = Path.join(cwd, 'okf');
+		const root = Path.join(cwd, BUNDLE_DIRNAME);
 		let count = 0;
 		for (const entry of OkfStore.walk(root)) {
 			if (entry.isDirectory === true) {

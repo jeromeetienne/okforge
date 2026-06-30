@@ -1,7 +1,7 @@
 ---
 type: CLI Command
 title: okforge nudge
-description: Stop-hook companion that reminds when documented source changed but okf/ was not updated.
+description: Stop-hook companion that reminds when documented source changed but .okf/ was not updated.
 resource: src/commands/nudge_command.ts
 tags: [cli, hook, staleness]
 timestamp: 2026-06-29
@@ -27,7 +27,7 @@ of these hold:
 - It has not already nudged this session — a per-session marker file in the
   temp dir (`claude-okf-nudge-<session_id>`) makes it fire at most once.
 - `cwd` is a git repository.
-- `okf/` is not already being touched (a `git status --porcelain -- okf` check),
+- `.okf/` is not already being touched (a `git status --porcelain -- .okf` check),
   so work in progress is not interrupted.
 - [stale](./stale.md) folders exist (via `OkfStore.staleFolders`).
 

@@ -14,7 +14,7 @@ website stays consistent with `okforge graph` and `okforge check`.
 From the repo root:
 
 ```bash
-npm run webview:build           # bundle: ./okf  ->  out: contribs/webview/dist
+npm run webview:build           # bundle: ./.okf  ->  out: contribs/webview/dist
 ```
 
 Or run the generator directly, pointing at any bundle and output directory:
@@ -25,7 +25,7 @@ npx tsx contribs/webview/generate.ts --bundle path/to/bundle --out path/to/site
 
 | Option | Default | Meaning |
 | --- | --- | --- |
-| `-b, --bundle <dir>` | `./okf` | OKF bundle root to render. |
+| `-b, --bundle <dir>` | `./.okf` | OKF bundle root to render. |
 | `-o, --out <dir>` | `contribs/webview/dist` | Output directory for the static site. |
 
 The generator bakes the bundle's graph metadata and raw markdown into

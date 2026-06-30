@@ -37,15 +37,15 @@ no state.
 ## Staleness
 
 `staleFolders(cwd)` returns the folders whose source changed since HEAD while
-`okf/<folder>` itself was not edited. The skip-when-edited rule (a
-`git status --porcelain` check on `okf/<folder>`) keeps work-in-progress from
+`.okf/<folder>` itself was not edited. The skip-when-edited rule (a
+`git status --porcelain` check on `.okf/<folder>`) keeps work-in-progress from
 triggering the [nudge](../cli_commands/nudge.md). `firstMatch(changed, prefixes)`
 is the substring match that pairs a changed path to a folder. Returns `[]` when
 not a git repo, no folders are declared, or nothing changed.
 
 ## Conformance lint
 
-`check(cwd)` lints the `okf/` bundle and returns the list of problems (empty when
+`check(cwd)` lints the `.okf/` bundle and returns the list of problems (empty when
 conformant); it throws when there is no bundle. It needs no mapping — it lints
 the markdown alone — so it is repository-agnostic. The four checks:
 

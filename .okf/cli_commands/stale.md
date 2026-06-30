@@ -13,7 +13,7 @@ timestamp: 2026-06-29
 npx okforge stale [dir]
 ```
 
-Lists folders whose mapped source changed since HEAD while `okf/<folder>` itself
+Lists folders whose mapped source changed since HEAD while `.okf/<folder>` itself
 was not edited, one per line as `<folder> (source changed: <path>)`.
 
 # Arguments
