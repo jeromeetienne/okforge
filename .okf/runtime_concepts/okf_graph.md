@@ -13,7 +13,9 @@ timestamp: 2026-06-29
 pure, read-only mechanics: it parses frontmatter and markdown links, resolves
 both the absolute (`/foo.md`) and relative (`./foo.md`) link forms to Concept
 IDs, and answers the graph-heavy queries that are awkward with Glob/Grep alone.
-It backs the [graph](../cli_commands/graph.md) command.
+It backs the [graph](../cli_commands/graph.md) command and the
+[webview](../contribs/webview.md) generator, which bakes the same graph into a
+static site.
 
 Reserved files (`index.md`, `log.md`) are not graph nodes and their links do not
 form edges — so a concept reachable only from an `index.md` still counts as an
