@@ -5,7 +5,7 @@
 	"type": "module",
 	"private": true,
 	"scripts": {
-		"build": "tsx generate.ts",
+		"build": "tsx src/generate.ts",
 		"deploy": "npm run build && bash ../../scripts/webview_deploy.sh"
 	}
 }

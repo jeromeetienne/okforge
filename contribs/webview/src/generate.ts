@@ -2,14 +2,17 @@ import Fs from 'node:fs';
 import Path from 'node:path';
 import Url from 'node:url';
 import { Command } from 'commander';
-import { OkfGraph, OkfGraphData } from '../../src/misc/okf_graph.js';
-import { OkfStore } from '../../src/misc/okf_store.js';
+import { OkfGraph, OkfGraphData } from '../../../src/misc/okf_graph.js';
+import { OkfStore } from '../../../src/misc/okf_store.js';
 
 /** Number of top hub concepts surfaced in the overview, matching the graph CLI. */
 const HUB_LIMIT = 10;
 
-/** Directory of this script, used to resolve the bundled template and defaults. */
+/** Directory of this script (`contribs/webview/src/`). */
 const SCRIPT_DIR = Path.dirname(Url.fileURLToPath(import.meta.url));
+
+/** Root of the webview contribution holding the static `template/` and `dist/`. */
+const WEBVIEW_DIR = Path.join(SCRIPT_DIR, '..');
 
 /** One concept baked into the site: graph metadata plus the raw markdown body. */
 type BakedConcept = {
@@ -130,7 +133,7 @@ class WebviewGenerator {
 		const data = WebviewGenerator.buildData(root);
 
 		Fs.mkdirSync(outDir, { recursive: true });
-		WebviewGenerator.copyTree(Path.join(SCRIPT_DIR, 'template'), outDir);
+		WebviewGenerator.copyTree(Path.join(WEBVIEW_DIR, 'template'), outDir);
 		Fs.writeFileSync(
 			Path.join(outDir, 'data.js'),
 			`window.__OKF__ = ${JSON.stringify(data, null, 2)};\n`,
@@ -150,8 +153,8 @@ const program = new Command();
 program
 	.name('okforge-webview')
 	.description('Generate a static website to browse an OKF bundle')
-	.option('-b, --bundle <dir>', 'bundle root directory', Path.join(SCRIPT_DIR, '..', '..', '.okf'))
-	.option('-o, --out <dir>', 'output directory', Path.join(SCRIPT_DIR, 'dist'))
+	.option('-b, --bundle <dir>', 'bundle root directory', Path.join(WEBVIEW_DIR, '..', '..', '.okf'))
+	.option('-o, --out <dir>', 'output directory', Path.join(WEBVIEW_DIR, 'dist'))
 	.action((options: { bundle: string; out: string }) => {
 		WebviewGenerator.run(options.bundle, options.out);
 	});
