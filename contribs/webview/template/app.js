@@ -356,6 +356,40 @@ function renderSidebar(filter) {
 }
 
 /**
+ * Whether the layout is in the mobile breakpoint (sidebar overlays the main
+ * pane rather than sitting beside it).
+ * @returns {boolean}
+ */
+function isMobile() {
+	return window.matchMedia('(max-width: 720px)').matches;
+}
+
+/**
+ * Reflect the current sidebar-open state on the toggle button (icon + a11y).
+ * @returns {void}
+ */
+function syncSidebarToggle() {
+	const toggle = document.getElementById('sidebar-toggle');
+	if (toggle === null) {
+		return;
+	}
+	const open = document.body.classList.contains('sidebar-open');
+	toggle.textContent = open ? '✕' : '☰';
+	toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+	toggle.setAttribute('aria-label', open ? 'Hide concepts' : 'Show concepts');
+}
+
+/**
+ * Show or hide the mobile sidebar overlay.
+ * @param {boolean} open
+ * @returns {void}
+ */
+function setSidebarOpen(open) {
+	document.body.classList.toggle('sidebar-open', open);
+	syncSidebarToggle();
+}
+
+/**
  * Concept id encoded in the current location hash, or null when the route is
  * not a concept route.
  * @returns {string | null}
@@ -910,6 +944,9 @@ function route() {
 		renderOverview();
 	}
 	renderSidebar(search_input !== null ? search_input.value : '');
+	if (isMobile() === true) {
+		setSidebarOpen(false);
+	}
 }
 
 window.addEventListener('hashchange', route);
@@ -919,6 +956,13 @@ document.addEventListener('DOMContentLoaded', () => {
 	if (brand !== null) {
 		brand.textContent = DATA.root || '';
 	}
+	const sidebar_toggle = document.getElementById('sidebar-toggle');
+	if (sidebar_toggle !== null) {
+		sidebar_toggle.addEventListener('click', () => {
+			setSidebarOpen(document.body.classList.contains('sidebar-open') === false);
+		});
+	}
+	syncSidebarToggle();
 	const search_input = /** @type {HTMLInputElement | null} */ (document.getElementById('search'));
 	if (search_input !== null) {
 		search_input.addEventListener('input', () => {

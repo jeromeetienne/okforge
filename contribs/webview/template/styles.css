@@ -76,6 +76,21 @@ a:hover { text-decoration: underline; }
 }
 #search:focus { outline: none; border-color: var(--accent); }
 
+.sidebar-toggle {
+	display: none;
+	margin-left: 8px;
+	flex: 0 0 auto;
+	background: var(--bg);
+	border: 1px solid var(--border);
+	color: var(--text);
+	border-radius: 6px;
+	padding: 6px 11px;
+	font-size: 16px;
+	line-height: 1;
+	cursor: pointer;
+}
+.sidebar-toggle:hover { border-color: var(--accent); color: var(--text); }
+
 .layout {
 	display: flex;
 	height: calc(100vh - var(--topbar-h));
@@ -271,3 +286,31 @@ a:hover { text-decoration: underline; }
 
 .empty-state { color: var(--text-dim); padding: 40px 0; text-align: center; }
 mark { background: var(--warn); color: #0b0d12; border-radius: 2px; padding: 0 1px; }
+
+@media (max-width: 720px) {
+	.topbar { gap: 8px; padding: 0 10px; }
+	.brand-bundle { display: none; }
+	.topnav { margin-left: 0; gap: 2px; }
+	.topnav a { padding: 6px 7px; }
+	#search { width: auto; flex: 1 1 40px; min-width: 0; margin-left: auto; }
+
+	.sidebar-toggle { display: inline-flex; align-items: center; }
+
+	.sidebar {
+		position: fixed;
+		top: var(--topbar-h);
+		left: 0;
+		right: 0;
+		width: 100%;
+		flex: none;
+		height: calc(100vh - var(--topbar-h));
+		z-index: 20;
+		border-right: none;
+		display: none;
+		padding: 12px 14px 60px;
+	}
+	body.sidebar-open .sidebar { display: block; }
+
+	.main { padding: 20px 16px 60px; }
+	#graph-wrap { height: calc(100vh - var(--topbar-h) - 24px); }
+}
