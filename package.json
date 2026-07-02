@@ -1,6 +1,6 @@
 {
 	"name": "okforge",
-	"version": "1.0.9",
+	"version": "1.0.10",
 	"description": "Open Knowledge Format (OKF) skill for Claude Code — deterministic okf bundle mechanics and a Stop-hook nudge.",
 	"type": "module",
 	"bin": {
