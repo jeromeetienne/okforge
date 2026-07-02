@@ -22,12 +22,19 @@ describe('OkfStore.firstLine', () => {
 });
 
 describe('OkfStore.firstMatch', () => {
-	it('returns the first changed path matching any prefix', () => {
+	it('returns the first changed path under a directory prefix', () => {
 		assert.equal(OkfStore.firstMatch(['src/a.ts', 'docs/b.md'], ['docs/']), 'docs/b.md');
 	});
 	it('ignores empty prefixes and returns null when nothing matches', () => {
 		assert.equal(OkfStore.firstMatch(['src/a.ts'], ['']), null);
 		assert.equal(OkfStore.firstMatch(['src/a.ts'], ['lib/']), null);
+	});
+	// F1 regression (issue #24): matching is an unanchored substring test, so a
+	// prefix matches unrelated paths. When F1 lands (path-boundary matching),
+	// flip both of these to expect null.
+	it('matches on substring, not path boundary (current behaviour)', () => {
+		assert.equal(OkfStore.firstMatch(['vendor/mysrc.ts'], ['src']), 'vendor/mysrc.ts');
+		assert.equal(OkfStore.firstMatch(['src/foobar.ts'], ['foo']), 'src/foobar.ts');
 	});
 });
 
@@ -69,6 +76,19 @@ describe('OkfStore.walk', () => {
 	});
 });
 
+describe('OkfStore.bundleLinks', () => {
+	// F2/F4 regression (issues #23, #22): only absolute `/x.md` links are matched;
+	// relative links are ignored and fenced code is not stripped. When those land,
+	// this returns both targets (and excludes the fenced one).
+	it('collects only absolute bundle links (current behaviour)', () => {
+		const root = makeTree({
+			'a.md': 'abs [x](/dir/x.md) rel [y](./y.md) up [z](../z.md)\n',
+		});
+		after(() => removeTree(root));
+		assert.deepEqual(OkfStore.bundleLinks(OkfStore.walk(root)), ['/dir/x.md']);
+	});
+});
+
 describe('OkfStore.check', () => {
 	it('returns no problems for a conformant bundle', () => {
 		const root = makeTree({
@@ -79,20 +99,31 @@ describe('OkfStore.check', () => {
 		after(() => removeTree(root));
 		assert.deepEqual(OkfStore.check(root), []);
 	});
-	it('flags kebab-case, missing type, sub-folder frontmatter, and dangling links', () => {
+	it('flags kebab-case, missing type, and sub-folder frontmatter', () => {
 		const root = makeTree({
 			'.okf/index.md': '# Bundle\n',
 			'.okf/bad-name.md': '---\ntype: concept\n---\n',
 			'.okf/notype.md': '# no frontmatter\n',
 			'.okf/sub/index.md': '---\ntype: nope\n---\n',
-			'.okf/sub/c.md': '---\ntype: concept\n---\ndead [x](/missing.md)\n',
+			'.okf/sub/c.md': '---\ntype: concept\n---\nleaf\n',
 		});
 		after(() => removeTree(root));
 		const problems = OkfStore.check(root);
 		assert.ok(problems.some((p) => p.startsWith('NAME:')));
 		assert.ok(problems.some((p) => p.startsWith('TYPE:')));
 		assert.ok(problems.some((p) => p.startsWith('INDEX:')));
-		assert.ok(problems.some((p) => p.startsWith('LINK:')));
+	});
+	// F2 regression (issue #23): CI `check` only lints absolute dead links, so a
+	// dangling relative link passes. When F2 lands (shared resolver), this bundle
+	// must report TWO LINK problems — flip the count and drop this comment then.
+	it('catches only the absolute dangling link, not the relative one (current behaviour)', () => {
+		const root = makeTree({
+			'.okf/index.md': '# Bundle\n',
+			'.okf/a.md': '---\ntype: concept\n---\nabs [x](/missing.md) rel [y](./gone.md)\n',
+		});
+		after(() => removeTree(root));
+		const links = OkfStore.check(root).filter((p) => p.startsWith('LINK:'));
+		assert.deepEqual(links, ['LINK: dangling bundle link: /missing.md']);
 	});
 	it('throws when there is no bundle', () => {
 		const root = makeTree({ 'README.md': 'x' });

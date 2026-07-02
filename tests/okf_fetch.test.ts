@@ -37,6 +37,9 @@ describe('OkfFetch.resolveTarget', () => {
 		assert.equal(OkfFetch.resolveTarget('./c.md', 'dir/b.md'), 'dir/c.md');
 		assert.equal(OkfFetch.resolveTarget('../e.md', 'dir/b.md'), 'e.md');
 	});
+	it('strips anchors before resolving', () => {
+		assert.equal(OkfFetch.resolveTarget('/a.md#section', 'dir/b.md'), 'a.md');
+	});
 	it('returns null for anchors, external, non-md, and escaping targets', () => {
 		assert.equal(OkfFetch.resolveTarget('#x', 'a.md'), null);
 		assert.equal(OkfFetch.resolveTarget('https://x.com/y.md', 'a.md'), null);

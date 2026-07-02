@@ -4,13 +4,11 @@ import { OkfGraph } from '../src/misc/okf_graph.js';
 import { makeTree, removeTree } from './helpers.js';
 
 describe('OkfGraph.unquote', () => {
-	it('strips a single pair of double quotes', () => {
+	it('strips a single matching pair of quotes', () => {
 		assert.equal(OkfGraph.unquote('"hello"'), 'hello');
-	});
-	it('strips a single pair of single quotes', () => {
 		assert.equal(OkfGraph.unquote("'hello'"), 'hello');
 	});
-	it('leaves unquoted and mismatched values untouched', () => {
+	it('leaves unquoted or mismatched values untouched', () => {
 		assert.equal(OkfGraph.unquote('hello'), 'hello');
 		assert.equal(OkfGraph.unquote('"hello'), '"hello');
 	});
@@ -46,12 +44,23 @@ describe('OkfGraph.parseFrontmatter', () => {
 	});
 	it('parses block-form tags', () => {
 		const content = ['---', 'type: concept', 'tags:', '  - alpha', '  - beta', '---'].join('\n');
-		const front = OkfGraph.parseFrontmatter(content);
-		assert.deepEqual(front.tags, ['alpha', 'beta']);
+		assert.deepEqual(OkfGraph.parseFrontmatter(content).tags, ['alpha', 'beta']);
 	});
 	it('ignores unknown keys', () => {
 		const content = ['---', 'type: concept', 'weird: value', '---'].join('\n');
 		assert.equal(OkfGraph.parseFrontmatter(content).type, 'concept');
+	});
+	// F3 regression (issue #25): an unterminated frontmatter block currently
+	// discards the parsed result and returns empties. When F3 lands, flip this
+	// to expect { type: 'concept', title: 'kept', ... }.
+	it('drops the parsed result on an unterminated block (current behaviour)', () => {
+		const content = ['---', 'type: concept', 'title: kept', 'no closing delimiter'].join('\n');
+		assert.deepEqual(OkfGraph.parseFrontmatter(content), {
+			type: '',
+			title: '',
+			description: '',
+			tags: [],
+		});
 	});
 });
 
@@ -59,6 +68,13 @@ describe('OkfGraph.extractLinkTargets', () => {
 	it('extracts markdown link targets in document order', () => {
 		const content = 'see [a](./a.md) and [b](/b.md) and [ext](https://x.com)';
 		assert.deepEqual(OkfGraph.extractLinkTargets(content), ['./a.md', '/b.md', 'https://x.com']);
+	});
+	// F4 regression (issue #22): the regex extractor also matches links inside
+	// fenced code blocks, producing phantom edges / false dead links. When F4
+	// lands (token-based extraction), flip this to expect [] .
+	it('extracts links inside fenced code blocks (current behaviour)', () => {
+		const content = ['# Example', '```', 'see [x](/foo/bar.md)', '```'].join('\n');
+		assert.deepEqual(OkfGraph.extractLinkTargets(content), ['/foo/bar.md']);
 	});
 });
 
@@ -70,8 +86,10 @@ describe('OkfGraph.resolveLink', () => {
 		assert.deepEqual(OkfGraph.resolveLink('/a.md', 'dir/b.md', root), { id: 'a', file: 'a.md', exists: true });
 	});
 	it('resolves a relative link and flags a missing target', () => {
-		const resolved = OkfGraph.resolveLink('../missing.md', 'dir/b.md', root);
-		assert.deepEqual(resolved, { id: 'missing', file: 'missing.md', exists: false });
+		assert.deepEqual(OkfGraph.resolveLink('../missing.md', 'dir/b.md', root), { id: 'missing', file: 'missing.md', exists: false });
+	});
+	it('strips anchors before resolving', () => {
+		assert.deepEqual(OkfGraph.resolveLink('/a.md#section', 'dir/b.md', root), { id: 'a', file: 'a.md', exists: true });
 	});
 	it('returns null for anchors, external, and non-md targets', () => {
 		assert.equal(OkfGraph.resolveLink('#section', 'a.md', root), null);
@@ -130,10 +148,26 @@ describe('OkfGraph.build and queries', () => {
 		assert.deepEqual(neighbors, ['a', 'c']);
 	});
 	it('ranks hubs by inbound count', () => {
-		const hubs = OkfGraph.hubs(graph, 10);
-		assert.deepEqual(hubs, [
+		assert.deepEqual(OkfGraph.hubs(graph, 10), [
 			{ id: 'b', inbound: 1 },
 			{ id: 'c', inbound: 1 },
+		]);
+	});
+});
+
+describe('OkfGraph.groups', () => {
+	const root = makeTree({
+		'root_concept.md': ['---', 'type: concept', '---', 'x'].join('\n'),
+		'topic/one.md': ['---', 'type: concept', '---', 'x'].join('\n'),
+		'topic/two.md': ['---', 'type: concept', '---', 'x'].join('\n'),
+	});
+	const graph = OkfGraph.build(root);
+	after(() => removeTree(root));
+
+	it('groups concept counts by top-level directory', () => {
+		assert.deepEqual(OkfGraph.groups(graph), [
+			{ group: '<root>', count: 1 },
+			{ group: 'topic', count: 2 },
 		]);
 	});
 });
