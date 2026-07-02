@@ -22,6 +22,10 @@ export type HookInput = z.infer<typeof HookInputSchema>;
  * session and stays silent when `.okf/` was already touched. The folder <-> source
  * mapping lives in the repository's `.okforge.config.json`, so the hook and the
  * skill read a single source of truth.
+ *
+ * Scope: drift is measured against the working tree vs `HEAD`, so the nudge only
+ * sees uncommitted edits in the live session. Committed-but-unsynced drift is out
+ * of scope here by design — gate that in CI with `okforge stale --since <ref>`.
  */
 export class NudgeCommand {
 	/** Read the hook payload from stdin and evaluate the nudge; never throws. */

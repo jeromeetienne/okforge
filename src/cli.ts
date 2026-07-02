@@ -57,11 +57,16 @@ async function main(): Promise<void> {
 
 	program
 		.command('stale')
-		.description('List folders whose source changed since HEAD while the folder was not edited')
+		.description('List folders whose source changed while the folder was not updated')
 		.argument('[dir]', 'Repository root', '.')
-		.action((dir: string) => {
-			for (const line of StaleCommand.stale(Path.resolve(dir))) {
+		.option('--since <ref>', 'Diff the committed range <ref>...HEAD (CI gate: exits non-zero when stale)')
+		.action((dir: string, options: { since?: string }) => {
+			const lines = StaleCommand.stale(Path.resolve(dir), options.since);
+			for (const line of lines) {
 				console.log(line);
+			}
+			if (options.since !== undefined && lines.length > 0) {
+				process.exit(1);
 			}
 		});
 

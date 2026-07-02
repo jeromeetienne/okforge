@@ -109,38 +109,83 @@ export class OkfStore {
 		}
 	}
 
-	/** Tracked-and-untracked paths changed since HEAD, sorted and de-duplicated. */
+	/**
+	 * Tracked-and-untracked paths changed in the working tree relative to `HEAD`,
+	 * sorted and de-duplicated. This is a working-tree snapshot: once a change is
+	 * committed it no longer appears here (see {@link OkfStore.changedPathsSince}
+	 * for a committed-range diff).
+	 */
 	static changedPaths(cwd: string): string[] {
 		const tracked = OkfStore.git(['diff', '--name-only', 'HEAD'], cwd);
 		const untracked = OkfStore.git(['ls-files', '--others', '--exclude-standard'], cwd);
-		const paths = `${tracked}\n${untracked}`
+		return OkfStore.uniqueLines(`${tracked}\n${untracked}`);
+	}
+
+	/** Paths changed on the `HEAD` side of `<ref>...HEAD` (a PR range), sorted. */
+	static changedPathsSince(cwd: string, ref: string): string[] {
+		return OkfStore.uniqueLines(OkfStore.git(['diff', '--name-only', `${ref}...HEAD`], cwd));
+	}
+
+	/** Trim, drop blanks, de-duplicate, and sort the lines of `text`. */
+	static uniqueLines(text: string): string[] {
+		const lines = text
 			.split('\n')
 			.map((line) => line.trim())
 			.filter((line) => line !== '');
-		return [...new Set(paths)].sort();
+		return [...new Set(lines)].sort();
 	}
 
 	/**
-	 * Folders whose source changed since HEAD while the folder itself was not
-	 * edited this session. Folders already being edited under `okf/<folder>` are
-	 * skipped so the user is not nudged about work in progress.
+	 * Folders whose source changed while the folder itself was not touched. Drift is
+	 * measured against the **working tree vs `HEAD`** (plus untracked files): it sees
+	 * uncommitted edits only. Once source is committed without touching `.okf/`, that
+	 * drift leaves this view — the Stop-hook nudge is deliberately scoped to the
+	 * live session. Use {@link OkfStore.staleFoldersSince} to gate committed drift in
+	 * CI. Folders already being edited under `.okf/<folder>` are skipped so the user
+	 * is not nudged about work in progress.
 	 */
 	static staleFolders(cwd: string): StaleFolder[] {
 		if (OkfStore.isGitRepo(cwd) === false) {
-			return [];
-		}
-		const config = OkfStore.loadConfig(cwd);
-		const folders = Object.keys(config.folders);
-		if (folders.length === 0) {
 			return [];
 		}
 		const changed = OkfStore.changedPaths(cwd);
 		if (changed.length === 0) {
 			return [];
 		}
+		return OkfStore.staleAgainst(cwd, changed, (folder) =>
+			OkfStore.git(['status', '--porcelain', '--', `${BUNDLE_DIRNAME}/${folder}`], cwd) !== '',
+		);
+	}
+
+	/**
+	 * Folders whose source changed in the committed range `<ref>...HEAD` while
+	 * `.okf/<folder>` was not changed in the same range. Unlike
+	 * {@link OkfStore.staleFolders}, this reads committed history, so CI can gate a
+	 * PR (e.g. `ref = origin/main`) and fail when documented source moved but its
+	 * bundle folder did not.
+	 */
+	static staleFoldersSince(cwd: string, ref: string): StaleFolder[] {
+		if (OkfStore.isGitRepo(cwd) === false) {
+			return [];
+		}
+		const changed = OkfStore.changedPathsSince(cwd, ref);
+		if (changed.length === 0) {
+			return [];
+		}
+		return OkfStore.staleAgainst(cwd, changed, (folder) =>
+			OkfStore.git(['diff', '--name-only', `${ref}...HEAD`, '--', `${BUNDLE_DIRNAME}/${folder}`], cwd) !== '',
+		);
+	}
+
+	/**
+	 * Match `changed` paths against each configured folder's source prefixes,
+	 * skipping folders for which `folderTouched` is true, and return the stale ones.
+	 */
+	static staleAgainst(cwd: string, changed: string[], folderTouched: (folder: string) => boolean): StaleFolder[] {
+		const config = OkfStore.loadConfig(cwd);
 		const stale: StaleFolder[] = [];
-		for (const folder of folders) {
-			if (OkfStore.git(['status', '--porcelain', '--', `${BUNDLE_DIRNAME}/${folder}`], cwd) !== '') {
+		for (const folder of Object.keys(config.folders)) {
+			if (folderTouched(folder) === true) {
 				continue;
 			}
 			const source = OkfStore.firstMatch(changed, config.folders[folder]);

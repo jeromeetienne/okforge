@@ -21,6 +21,13 @@ describe('OkfStore.firstLine', () => {
 	});
 });
 
+describe('OkfStore.uniqueLines', () => {
+	it('trims, drops blanks, de-duplicates, and sorts', () => {
+		assert.deepEqual(OkfStore.uniqueLines('b\n a \n\nb\nc\n'), ['a', 'b', 'c']);
+		assert.deepEqual(OkfStore.uniqueLines(''), []);
+	});
+});
+
 describe('OkfStore.firstMatch', () => {
 	it('returns the first changed path under a directory prefix', () => {
 		assert.equal(OkfStore.firstMatch(['src/a.ts', 'docs/b.md'], ['docs/']), 'docs/b.md');
