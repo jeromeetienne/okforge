@@ -110,15 +110,15 @@ async function main(): Promise<void> {
 	webview
 		.command('generate')
 		.description('Generate a static OKF webview into an output folder')
-		.argument('[bundle]', 'OKF bundle root directory', '.okf')
+		.argument('[bundle]', 'OKF bundle root directory or http(s) URL', '.okf')
 		.option('-o, --output_folder <dir>', 'Output directory for the static site', 'okforge_webview')
-		.action((bundle: string, options: { output_folder: string }) => {
-			WebviewCommand.generate(bundle, options.output_folder);
+		.action(async (bundle: string, options: { output_folder: string }) => {
+			await WebviewCommand.generate(bundle, options.output_folder);
 		});
 	webview
 		.command('show')
 		.description('Generate the webview into a temp folder and serve it over HTTP')
-		.argument('[bundle]', 'OKF bundle root directory', '.okf')
+		.argument('[bundle]', 'OKF bundle root directory or http(s) URL', '.okf')
 		.action(async (bundle: string) => {
 			await WebviewCommand.show(bundle);
 		});

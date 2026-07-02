@@ -4,6 +4,7 @@ import Path from 'node:path';
 import Http from 'node:http';
 import { OkfGraph, OkfGraphData } from '../misc/okf_graph.js';
 import { OkfStore } from '../misc/okf_store.js';
+import { OkfFetch } from '../misc/okf_fetch.js';
 
 /** Number of top hub concepts surfaced in the overview, matching the graph CLI. */
 const HUB_LIMIT = 10;
@@ -52,13 +53,15 @@ type BakedData = {
  * bodies into a `data.js` island, then copies the static browser app alongside it.
  * `generate` writes the site to a chosen directory; `show` writes it to a temp
  * directory and serves it over HTTP so any bundle can be viewed in one command.
+ * A bundle source may be a local directory or an http(s) URL; URLs are downloaded
+ * into a temp directory first (see {@link OkfFetch}) and then treated identically.
  */
 export class WebviewCommand {
 	/** Generate the site into `out` for the bundle at `bundle`. */
-	static generate(bundle: string, out: string): void {
-		const root = WebviewCommand.resolveBundle(bundle);
+	static async generate(bundle: string, out: string): Promise<void> {
+		const { root, name } = await WebviewCommand.resolveBundle(bundle);
 		const outDir = Path.resolve(out);
-		const data = WebviewCommand.buildData(root);
+		const data = WebviewCommand.buildData(root, name);
 
 		Fs.mkdirSync(outDir, { recursive: true });
 		WebviewCommand.copyTree(TEMPLATE_DIR, outDir);
@@ -70,15 +73,15 @@ export class WebviewCommand {
 
 		const brokenCount = WebviewCommand.brokenCount(data);
 		console.log(`okforge webview generated at ${Path.join(outDir, 'index.html')}`);
-		console.log(`  bundle: ${root}`);
+		console.log(`  bundle: ${OkfFetch.isUrl(bundle) === true ? bundle : root}`);
 		console.log(`  concepts: ${data.concepts.length}, broken links: ${brokenCount}`);
 	}
 
 	/** Generate the site into a temp directory and serve it over HTTP until interrupted. */
 	static async show(bundle: string): Promise<void> {
-		const root = WebviewCommand.resolveBundle(bundle);
+		const { root, name } = await WebviewCommand.resolveBundle(bundle);
 		const outDir = Fs.mkdtempSync(Path.join(Os.tmpdir(), 'okforge-webview-'));
-		const data = WebviewCommand.buildData(root);
+		const data = WebviewCommand.buildData(root, name);
 
 		WebviewCommand.copyTree(TEMPLATE_DIR, outDir);
 		Fs.writeFileSync(
@@ -88,31 +91,35 @@ export class WebviewCommand {
 		);
 
 		const url = await WebviewCommand.serve(outDir);
-		console.log(`okforge webview serving ${root}`);
+		console.log(`okforge webview serving ${OkfFetch.isUrl(bundle) === true ? bundle : root}`);
 		console.log(`  concepts: ${data.concepts.length}, broken links: ${WebviewCommand.brokenCount(data)}`);
 		console.log(`  ${url}`);
 		console.log('  (press Ctrl-C to stop)');
 	}
 
-	/** Resolve and validate a local bundle path; rejects URLs (not yet supported). */
-	static resolveBundle(bundle: string): string {
-		if (/^https?:\/\//i.test(bundle) === true) {
-			throw new Error('URL bundle sources are not yet supported; pass a local bundle directory');
+	/**
+	 * Resolve a bundle source to a local root directory plus a display name. Local
+	 * paths are validated in place; http(s) URLs are downloaded into a temp dir
+	 * first (see {@link OkfFetch.materialize}) and then treated as local.
+	 */
+	static async resolveBundle(bundle: string): Promise<{ root: string; name: string }> {
+		if (OkfFetch.isUrl(bundle) === true) {
+			return { root: await OkfFetch.materialize(bundle), name: OkfFetch.bundleName(bundle) };
 		}
 		const root = Path.resolve(bundle);
 		if (Fs.existsSync(root) === false || Fs.statSync(root).isDirectory() === false) {
 			throw new Error(`no bundle directory at ${root}`);
 		}
-		return root;
+		return { root, name: Path.basename(root) };
 	}
 
-	/** Build the data island for the bundle rooted at `root`. */
-	static buildData(root: string): BakedData {
+	/** Build the data island for the bundle rooted at `root`, labelled `name`. */
+	static buildData(root: string, name: string): BakedData {
 		const graph = OkfGraph.build(root);
 		const concepts = WebviewCommand.bakeConcepts(graph, root);
 		const reserved = WebviewCommand.bakeReserved(root);
 		return {
-			root: Path.basename(root),
+			root: name,
 			generatedAt: new Date().toISOString(),
 			concepts,
 			reserved,

@@ -19,16 +19,35 @@ okforge webview generate [bundle]        # bundle default: ./.okf
 
 | Argument / Option | Default | Meaning |
 | --- | --- | --- |
-| `[bundle]` | `.okf` | OKF bundle root to render (local directory). |
+| `[bundle]` | `.okf` | OKF bundle root to render (local directory **or** http(s) URL). |
 | `-o, --output_folder <dir>` | `okforge_webview` | Output directory for the static site. |
 
 The generator bakes the bundle's graph metadata and raw markdown into
 `<output>/data.js`, then copies the static app (`index.html`, `app.js`,
 `styles.css`, `vendor/marked.min.js`) alongside it.
 
-> URL bundle sources (`https://…`) are not yet supported — see
-> [#17](https://github.com/jeromeetienne/okforge/issues/17). Pass a local
-> bundle directory for now.
+### URL bundle sources
+
+`[bundle]` may be an http(s) URL, so you can render a published bundle without
+cloning it. Since arbitrary HTTP hosts can't be directory-listed, the bundle is
+downloaded into a temp directory by **crawling**: `index.md`/`log.md` are fetched
+first, then every in-bundle `.md` link is followed (using the same link
+resolution as the graph engine) until the reachable file set is exhausted. Links
+that 404 are left unwritten and reported as broken, exactly as for a local
+bundle. Two URL forms are supported:
+
+```bash
+# Any static host that serves the bundle's files at <url>/index.md, <url>/log.md, …
+okforge webview generate https://example.com/path/to/okf/bundle
+
+# GitHub tree URL — rewritten to raw.githubusercontent.com for convenience
+okforge webview generate https://github.com/jeromeetienne/okforge/tree/main/.okf
+```
+
+The GitHub form `https://github.com/<owner>/<repo>/tree/<ref>/<path>` is treated
+as `https://raw.githubusercontent.com/<owner>/<repo>/refs/heads/<ref>/<path>/`.
+A bundle reachable only from files no link points to won't be crawled — the
+bundle's `index.md` must transitively link every file (as OKF bundles do).
 
 ## Show
 
@@ -40,6 +59,10 @@ okforge webview show [bundle]            # bundle default: ./.okf
 ```
 
 It prints a `http://127.0.0.1:<port>/` URL and serves until you press Ctrl-C.
+Like `generate`, `[bundle]` may be a local directory or an http(s) URL (see
+[URL bundle sources](#url-bundle-sources) above), so `okforge webview show
+https://github.com/<owner>/<repo>/tree/<ref>/<path>` views a published bundle in
+one command.
 
 ## View a generated site
 
