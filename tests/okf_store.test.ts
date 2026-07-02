@@ -29,12 +29,16 @@ describe('OkfStore.firstMatch', () => {
 		assert.equal(OkfStore.firstMatch(['src/a.ts'], ['']), null);
 		assert.equal(OkfStore.firstMatch(['src/a.ts'], ['lib/']), null);
 	});
-	// F1 regression (issue #24): matching is an unanchored substring test, so a
-	// prefix matches unrelated paths. When F1 lands (path-boundary matching),
-	// flip both of these to expect null.
-	it('matches on substring, not path boundary (current behaviour)', () => {
-		assert.equal(OkfStore.firstMatch(['vendor/mysrc.ts'], ['src']), 'vendor/mysrc.ts');
-		assert.equal(OkfStore.firstMatch(['src/foobar.ts'], ['foo']), 'src/foobar.ts');
+	// F1 (issue #24): matching is on a path boundary, not an unanchored substring,
+	// so a prefix no longer matches unrelated paths.
+	it('does not match on substring across a path boundary', () => {
+		assert.equal(OkfStore.firstMatch(['vendor/mysrc.ts'], ['src']), null);
+		assert.equal(OkfStore.firstMatch(['src/foobar.ts'], ['foo']), null);
+	});
+	it('matches a bare prefix as the path itself or anything beneath it', () => {
+		assert.equal(OkfStore.firstMatch(['src/a.ts'], ['src']), 'src/a.ts');
+		assert.equal(OkfStore.firstMatch(['src'], ['src']), 'src');
+		assert.equal(OkfStore.firstMatch(['src/config.ts'], ['src/config']), null);
 	});
 });
 

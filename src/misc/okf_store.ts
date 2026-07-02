@@ -13,7 +13,9 @@ const BUNDLE_DIRNAME = '.okf';
 /**
  * The okforge config: the folder <-> source mapping for a repository. Each key
  * is an OKF concept folder; each value is the list of source path prefixes that
- * folder is derived from. A changed file under any prefix marks the folder stale.
+ * folder is derived from. Prefixes are matched on a path boundary — a prefix
+ * marks a changed file stale when the file is that path or lies beneath it — not
+ * as substrings or globs. A changed file under any prefix marks the folder stale.
  * This is per-repository data — okforge ships with none of it.
  */
 const OkfConfigSchema = z
@@ -149,13 +151,20 @@ export class OkfStore {
 		return stale;
 	}
 
-	/** First path in `changed` containing any of `prefixes` (substring match), or null. */
+	/**
+	 * First path in `changed` that lies under one of `prefixes`, or null. Matching
+	 * is on a path boundary, not an unanchored substring: a prefix matches the path
+	 * itself or anything beneath it (`src` matches `src` and `src/x.ts` but not
+	 * `vendor/mysrc.ts`). Empty prefixes are ignored.
+	 */
 	static firstMatch(changed: string[], prefixes: string[]): string | null {
-		for (const prefix of prefixes) {
+		for (const rawPrefix of prefixes) {
+			const prefix = rawPrefix.trim();
 			if (prefix === '') {
 				continue;
 			}
-			const match = changed.find((path) => path.includes(prefix));
+			const needle = prefix.endsWith('/') === true ? prefix : `${prefix}/`;
+			const match = changed.find((path) => path === prefix || path.startsWith(needle) === true);
 			if (match !== undefined) {
 				return match;
 			}
