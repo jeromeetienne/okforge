@@ -211,11 +211,9 @@ export class OkfStore {
 			}
 		}
 
-		// 4. bundle-relative links (/foo/bar.md) must resolve to a file.
-		for (const link of OkfStore.bundleLinks(entries)) {
-			if (Fs.existsSync(Path.join(root, link)) === false) {
-				problems.push(`LINK: dangling bundle link: ${link}`);
-			}
+		// 4. every in-bundle .md link (absolute or relative) must resolve to a file.
+		for (const { from, target } of OkfStore.brokenLinks(root, entries)) {
+			problems.push(`LINK: dangling bundle link: ${target} (in ${from})`);
 		}
 
 		return problems;
@@ -257,25 +255,33 @@ export class OkfStore {
 	}
 
 	/**
-	 * Distinct absolute bundle-relative `.md` link targets (`/foo/bar.md`) across
-	 * every doc, sorted. Extraction runs through {@link OkfLink.extractLinkTargets},
-	 * so links inside fenced or inline code are excluded. Relative links are not
-	 * yet resolved here (see F2).
+	 * Every in-bundle `.md` link — absolute (`/foo/bar.md`) or relative
+	 * (`./sibling.md`, `../other/x.md`) — that resolves inside the bundle but
+	 * points at a missing file, as `{ from, target }` in document order. Extraction
+	 * runs through {@link OkfLink.extractLinkTargets} (fenced/inline code excluded)
+	 * and resolution through {@link OkfLink.resolveBundleLink}, so the CI `check`
+	 * catches exactly what `graph broken` does — but across every doc, including
+	 * `index.md` / `log.md`.
 	 */
-	static bundleLinks(entries: WalkEntry[]): string[] {
-		const links = new Set<string>();
+	static brokenLinks(root: string, entries: WalkEntry[]): { from: string; target: string }[] {
+		const result: { from: string; target: string }[] = [];
 		for (const entry of entries) {
 			if (entry.isDirectory === true || entry.path.endsWith('.md') === false) {
 				continue;
 			}
+			const from = Path.relative(root, entry.path).split(Path.sep).join('/');
 			const content = Fs.readFileSync(entry.path, 'utf-8');
 			for (const target of OkfLink.extractLinkTargets(content)) {
-				if (target.startsWith('/') === true && target.endsWith('.md') === true) {
-					links.add(target);
+				const resolved = OkfLink.resolveBundleLink(target, from);
+				if (resolved === null) {
+					continue;
+				}
+				if (Fs.existsSync(Path.join(root, resolved.file)) === false) {
+					result.push({ from, target });
 				}
 			}
 		}
-		return [...links].sort();
+		return result;
 	}
 
 	/** The first line of `content` (without its trailing newline). */

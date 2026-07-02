@@ -76,16 +76,17 @@ describe('OkfStore.walk', () => {
 	});
 });
 
-describe('OkfStore.bundleLinks', () => {
-	// F2/F4 regression (issues #23, #22): only absolute `/x.md` links are matched;
-	// relative links are ignored and fenced code is not stripped. When those land,
-	// this returns both targets (and excludes the fenced one).
-	it('collects only absolute bundle links (current behaviour)', () => {
+describe('OkfStore.brokenLinks', () => {
+	it('flags absolute and relative dead links, ignores live and non-bundle ones', () => {
 		const root = makeTree({
-			'a.md': 'abs [x](/dir/x.md) rel [y](./y.md) up [z](../z.md)\n',
+			'a.md': 'ok [x](/x.md) dead-abs [m](/missing.md) dead-rel [g](./gone.md) ext [e](https://x.com) fenced [f]\n\n```\n[z](/nope.md)\n```\n',
+			'x.md': 'target\n',
 		});
 		after(() => removeTree(root));
-		assert.deepEqual(OkfStore.bundleLinks(OkfStore.walk(root)), ['/dir/x.md']);
+		assert.deepEqual(OkfStore.brokenLinks(root, OkfStore.walk(root)), [
+			{ from: 'a.md', target: '/missing.md' },
+			{ from: 'a.md', target: './gone.md' },
+		]);
 	});
 });
 
@@ -113,17 +114,19 @@ describe('OkfStore.check', () => {
 		assert.ok(problems.some((p) => p.startsWith('TYPE:')));
 		assert.ok(problems.some((p) => p.startsWith('INDEX:')));
 	});
-	// F2 regression (issue #23): CI `check` only lints absolute dead links, so a
-	// dangling relative link passes. When F2 lands (shared resolver), this bundle
-	// must report TWO LINK problems — flip the count and drop this comment then.
-	it('catches only the absolute dangling link, not the relative one (current behaviour)', () => {
+	// F2 (issue #23): CI `check` now lints both absolute and relative dead links
+	// via the shared resolver, so this bundle reports TWO LINK problems.
+	it('catches both the absolute and the relative dangling link', () => {
 		const root = makeTree({
 			'.okf/index.md': '# Bundle\n',
 			'.okf/a.md': '---\ntype: concept\n---\nabs [x](/missing.md) rel [y](./gone.md)\n',
 		});
 		after(() => removeTree(root));
 		const links = OkfStore.check(root).filter((p) => p.startsWith('LINK:'));
-		assert.deepEqual(links, ['LINK: dangling bundle link: /missing.md']);
+		assert.deepEqual(links, [
+			'LINK: dangling bundle link: /missing.md (in a.md)',
+			'LINK: dangling bundle link: ./gone.md (in a.md)',
+		]);
 	});
 	it('throws when there is no bundle', () => {
 		const root = makeTree({ 'README.md': 'x' });
