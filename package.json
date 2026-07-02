@@ -23,7 +23,8 @@
 		"webview:deploy": "cd contribs/webview && npm run deploy",
 		"webview:open": "cd contribs/webview && npm run open",
 		"typecheck": "tsc --noEmit",
-		"build": "tsc -p tsconfig.build.json",
+		"build": "tsc -p tsconfig.build.json && npm run build:assets",
+		"build:assets": "node -e \"require('node:fs').cpSync('src/webview/template','dist/webview/template',{recursive:true})\"",
 		"publish:all": "npm run build && npm version patch && npm publish"
 	},
 	"author": {

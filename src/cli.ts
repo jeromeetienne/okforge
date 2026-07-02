@@ -11,6 +11,7 @@ import { CheckCommand } from './commands/check_command.js';
 import { NudgeCommand } from './commands/nudge_command.js';
 import { InstallCommand } from './commands/install_command.js';
 import { GraphCommand } from './commands/graph_command.js';
+import { WebviewCommand } from './commands/webview_command.js';
 
 /** Wire up the subcommands and run them. */
 async function main(): Promise<void> {
@@ -101,6 +102,25 @@ async function main(): Promise<void> {
 			const hops = Number.parseInt(options.hops, 10);
 			const result = GraphCommand.run(op, args, root, Number.isNaN(hops) === true ? 1 : hops);
 			console.log(JSON.stringify(result, null, 2));
+		});
+
+	const webview = program
+		.command('webview')
+		.description('Generate or serve a static website to browse an OKF bundle');
+	webview
+		.command('generate')
+		.description('Generate a static OKF webview into an output folder')
+		.argument('[bundle]', 'OKF bundle root directory', '.okf')
+		.option('-o, --output_folder <dir>', 'Output directory for the static site', 'okforge_webview')
+		.action((bundle: string, options: { output_folder: string }) => {
+			WebviewCommand.generate(bundle, options.output_folder);
+		});
+	webview
+		.command('show')
+		.description('Generate the webview into a temp folder and serve it over HTTP')
+		.argument('[bundle]', 'OKF bundle root directory', '.okf')
+		.action(async (bundle: string) => {
+			await WebviewCommand.show(bundle);
 		});
 
 	program

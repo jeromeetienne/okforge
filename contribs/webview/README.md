@@ -1,73 +1,86 @@
-# okforge webview (contrib)
+# okforge webview
 
 A self-contained **static website** to browse an OKF knowledge bundle — concept
 pages with rendered markdown and link panels, an overview dashboard, an
 interactive concept graph, and search. The generated site has no runtime
-dependencies and opens directly from `file://`.
+dependencies and opens directly from `file://` (or over HTTP).
 
-It is a contrib (not part of the published `okforge` npm package). The generator
-reuses the same graph engine as the CLI (`src/misc/okf_graph.ts`), so the
-website stays consistent with `okforge graph` and `okforge check`.
+The `webview` commands are part of the `okforge` CLI. The generator reuses the
+same graph engine as the CLI (`src/misc/okf_graph.ts`), so the website stays
+consistent with `okforge graph` and `okforge check`. The static app template
+lives in [`src/webview/template/`](../../src/webview/template/); this contrib
+folder holds only the GitHub Pages deploy tooling and the generated `dist/`.
 
 ## Generate
 
-From the repo root:
-
 ```bash
-npm run webview:build           # bundle: ./.okf  ->  out: contribs/webview/dist
+okforge webview generate [bundle]        # bundle default: ./.okf
 ```
 
-Or run the generator directly, pointing at any bundle and output directory:
-
-```bash
-npx tsx contribs/webview/generate.ts --bundle path/to/bundle --out path/to/site
-```
-
-| Option | Default | Meaning |
+| Argument / Option | Default | Meaning |
 | --- | --- | --- |
-| `-b, --bundle <dir>` | `./.okf` | OKF bundle root to render. |
-| `-o, --out <dir>` | `contribs/webview/dist` | Output directory for the static site. |
+| `[bundle]` | `.okf` | OKF bundle root to render (local directory). |
+| `-o, --output_folder <dir>` | `okforge_webview` | Output directory for the static site. |
 
 The generator bakes the bundle's graph metadata and raw markdown into
-`<out>/data.js`, then copies the static app (`index.html`, `app.js`,
+`<output>/data.js`, then copies the static app (`index.html`, `app.js`,
 `styles.css`, `vendor/marked.min.js`) alongside it.
 
-## View
+> URL bundle sources (`https://…`) are not yet supported — see
+> [#17](https://github.com/jeromeetienne/okforge/issues/17). Pass a local
+> bundle directory for now.
+
+## Show
+
+Build the webview into a temporary folder and serve it over HTTP, so you can
+trivially view any existing bundle in one command:
 
 ```bash
-open contribs/webview/dist/index.html      # or just double-click it
+okforge webview show [bundle]            # bundle default: ./.okf
+```
+
+It prints a `http://127.0.0.1:<port>/` URL and serves until you press Ctrl-C.
+
+## View a generated site
+
+```bash
+open okforge_webview/index.html          # or just double-click it
 ```
 
 Everything is baked in, so no server is required. To serve it over HTTP instead
 (e.g. to share on a LAN), any static server works:
 
 ```bash
-npx serve contribs/webview/dist
+npx serve okforge_webview
 ```
 
 ## Deploy to GitHub Pages
+
+From the repo root:
 
 ```bash
 npm run webview:deploy
 ```
 
-This rebuilds the site and force-pushes `dist/` to the `gh-pages` branch of
-`origin` as a single fresh commit (the site is a build artifact, not history),
-adding a `.nojekyll` marker so Pages serves it verbatim. Enable Pages once under
-the repo's **Settings → Pages** with branch `gh-pages` and folder `/ (root)`.
-The deploy logic lives in [`scripts/webview_deploy.sh`](../../scripts/webview_deploy.sh).
+This rebuilds the site into `contribs/webview/dist` and force-pushes it to the
+`gh-pages` branch of `origin` as a single fresh commit (the site is a build
+artifact, not history), adding a `.nojekyll` marker so Pages serves it verbatim.
+Enable Pages once under the repo's **Settings → Pages** with branch `gh-pages`
+and folder `/ (root)`. The deploy logic lives in
+[`scripts/webview_deploy.sh`](../../scripts/webview_deploy.sh).
 
 ## Layout
 
 ```
+src/webview/template/     # static app, copied verbatim into every generated site
+  index.html
+  app.js
+  styles.css
+  vendor/marked.min.js
+src/commands/webview_command.ts   # generator + HTTP server behind `okforge webview`
 contribs/webview/
-  generate.ts        # generator: build graph -> bake data.js + copy template
-  template/          # static app copied verbatim into the output
-    index.html
-    app.js
-    styles.css
-    vendor/marked.min.js
-  dist/              # generated output (gitignored)
+  package.json            # local build/open/deploy convenience scripts
+  dist/                   # generated output for gh-pages (gitignored)
 ```
 
 ## How it maps to the bundle
