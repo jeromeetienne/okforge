@@ -1,5 +1,19 @@
 # Change log
 
+## 2026-07-02
+
+- Refreshed the webview docs after the generator moved from
+  `contribs/webview/src/generate.ts` (`WebviewGenerator`) into the published CLI
+  as `WebviewCommand` in `src/commands/webview_command.ts`, exposed as the
+  `webview generate` / `webview show` subcommands. Added the
+  `cli_commands/webview` concept, rewrote `contribs/webview` to reflect that the
+  contrib folder now holds only the GitHub Pages deploy tooling and generated
+  `dist/`, and cross-linked both.
+- Documented the new `OkfFetch` runtime concept
+  (`runtime_concepts/okf_fetch`, from `src/misc/okf_fetch.ts`), which downloads a
+  remote http(s)/GitHub bundle into a temp directory by crawling its in-bundle
+  markdown links so a URL source can be rendered like a local bundle.
+
 ## 2026-06-30
 
 - Added the `contribs` folder documenting the `okforge-webview` static-site

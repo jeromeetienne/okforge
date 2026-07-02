@@ -20,4 +20,5 @@ each command takes an optional `[dir]` repository-root argument that defaults to
 ## Browsing and install
 
 - [graph](./graph.md) — read-only concept-graph queries as JSON.
+- [webview](./webview.md) — generate or serve a static site to browse a bundle.
 - [install](./install.md) — copy the bundled skills into an agent folder.

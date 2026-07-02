@@ -127,6 +127,8 @@ current directory (the repository root).
 | `okforge stale [<dir>]` | List folders whose source changed since HEAD while the folder was not edited. |
 | `okforge check [<dir>]` | Conformance + dead-link lint; exits non-zero on problems. |
 | `okforge graph <op> [args] [--bundle <dir>]` | Read-only concept-graph queries over a bundle (`overview`, `concept`, `neighbors`, `orphans`, `broken`, `path`), as JSON; powers the `okforge-query` skill. |
+| `okforge webview generate [<bundle>] [-o <dir>]` | Bake a bundle into a dependency-free static site. `<bundle>` may be a local dir or an http(s)/GitHub URL (default `.okf`). |
+| `okforge webview show [<bundle>]` | Generate the site into a temp dir and serve it over HTTP until interrupted. |
 | `okforge nudge` | Stop-hook entry: read the hook payload on stdin and maybe remind. |
 | `okforge install [<agent_folder>]` | Copy the bundled okf skill into an agent folder (default `.`); when that folder is named `.claude`, also register the `nudge` Stop hook in its `settings.json`. |
 
@@ -140,8 +142,9 @@ bundle-relative `.md` link resolves.
 npm install
 npm run okforge -- <command>   # run the CLI from source via tsx
 npm run typecheck              # tsc --noEmit
-npm run build                  # compile to dist/
+npm run build                  # compile to dist/ and copy the webview template
 npm run symlink:dotclaude      # mirror dotclaude_folder/ into .claude/ as symlinks
+npm run webview:open           # build the .okf webview and open it (also :build / :deploy)
 ```
 
 You can also run the source directly with `npx tsx src/cli.ts <command>`.
@@ -159,7 +162,10 @@ src/                        the okforge CLI (mechanics)
 ├── cli.ts                  Commander entry; wires the subcommands below
 ├── misc/
 │   ├── okf_store.ts        mapping load, stale detection, conformance lint
-│   └── okf_graph.ts        read-only concept-graph model (links, neighbors, orphans, paths)
+│   ├── okf_graph.ts        read-only concept-graph model (links, neighbors, orphans, paths)
+│   └── okf_fetch.ts        download a remote bundle by crawling its markdown links
+├── webview/
+│   └── template/           static browser app baked into every generated site
 └── commands/
     ├── map_command.ts      print the folder-to-source mapping
     ├── folders_command.ts  list the concept folders
@@ -167,6 +173,7 @@ src/                        the okforge CLI (mechanics)
     ├── stale_command.ts    folders whose source changed since HEAD
     ├── check_command.ts    conformance + dead-link lint
     ├── graph_command.ts    concept-graph queries for the okforge-query skill
+    ├── webview_command.ts  generate/serve the static webview
     ├── nudge_command.ts    the Stop-hook nudge
     └── install_command.ts  copy the skills into a target agent folder
 dotclaude_folder/           data shipped to a target's .claude/ by `okforge install`
@@ -176,6 +183,8 @@ dotclaude_folder/           data shipped to a target's .claude/ by `okforge inst
     └── okforge-query/
         ├── SKILL.md        read-only browser for any OKF bundle
         └── references/okf-rules.md   OKF v0.1 rules the browser encodes
+contribs/                   optional extensions, not part of the npm package
+└── webview/                GitHub Pages deploy tooling + generated dist/
 ```
 
 ## Conventions
@@ -186,9 +195,9 @@ dotclaude_folder/           data shipped to a target's .claude/ by `okforge inst
   conventional `# Schema` / `# Examples` / `# Citations` sections where they apply.
 - `index.md` is reserved and carries no frontmatter — except the root
   `.okf/index.md`, which declares `okf_version: "0.1"` and `type: Bundle Index`.
-- Cross-link concepts with bundle-relative absolute paths
-  (`/runtime_concepts/job_store.md`); cite real source files with repo-relative
-  paths (`../../packages/...`).
+- Cross-link concepts with relative markdown paths from the doc
+  (`../runtime_concepts/job_store.md`, `./sibling.md`) — not bundle-root absolute
+  paths; cite real source files with repo-relative paths (`../../packages/...`).
 - Ground every claim in real source. Do not invent fields, routes, flags, or
   states; if uncertain, omit.
 
