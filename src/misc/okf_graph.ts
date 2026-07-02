@@ -287,12 +287,11 @@ export class OkfGraph {
 	 * keys are ignored, never rejected.
 	 */
 	static parseFrontmatter(content: string): { type: string; title: string; description: string; tags: string[] } {
-		const empty = { type: '', title: '', description: '', tags: [] as string[] };
+		const result = { type: '', title: '', description: '', tags: [] as string[] };
 		const lines = content.split('\n');
 		if (lines.length === 0 || lines[0].trim() !== '---') {
-			return empty;
+			return result;
 		}
-		const result = { type: '', title: '', description: '', tags: [] as string[] };
 		let tagsMode = false;
 		for (let index = 1; index < lines.length; index += 1) {
 			const line = lines[index];
@@ -325,7 +324,7 @@ export class OkfGraph {
 				}
 			}
 		}
-		return empty;
+		return result;
 	}
 
 	/** Parse an inline YAML list `[a, b, c]` into trimmed, unquoted strings. */

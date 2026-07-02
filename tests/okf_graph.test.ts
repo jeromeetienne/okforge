@@ -50,14 +50,13 @@ describe('OkfGraph.parseFrontmatter', () => {
 		const content = ['---', 'type: concept', 'weird: value', '---'].join('\n');
 		assert.equal(OkfGraph.parseFrontmatter(content).type, 'concept');
 	});
-	// F3 regression (issue #25): an unterminated frontmatter block currently
-	// discards the parsed result and returns empties. When F3 lands, flip this
-	// to expect { type: 'concept', title: 'kept', ... }.
-	it('drops the parsed result on an unterminated block (current behaviour)', () => {
+	// F3 (issue #25): an unterminated frontmatter block keeps whatever was parsed
+	// instead of discarding it.
+	it('keeps the parsed result on an unterminated block', () => {
 		const content = ['---', 'type: concept', 'title: kept', 'no closing delimiter'].join('\n');
 		assert.deepEqual(OkfGraph.parseFrontmatter(content), {
-			type: '',
-			title: '',
+			type: 'concept',
+			title: 'kept',
 			description: '',
 			tags: [],
 		});
