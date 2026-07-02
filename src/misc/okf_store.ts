@@ -2,6 +2,7 @@ import Fs from 'node:fs';
 import Path from 'node:path';
 import ChildProcess from 'node:child_process';
 import { z } from 'zod';
+import { OkfLink } from './okf_link.js';
 
 /** Config file name read from the repository root. */
 const CONFIG_FILENAME = '.okforge.config.json';
@@ -255,19 +256,23 @@ export class OkfStore {
 		return false;
 	}
 
-	/** Distinct bundle-relative `.md` link targets across every doc, sorted. */
+	/**
+	 * Distinct absolute bundle-relative `.md` link targets (`/foo/bar.md`) across
+	 * every doc, sorted. Extraction runs through {@link OkfLink.extractLinkTargets},
+	 * so links inside fenced or inline code are excluded. Relative links are not
+	 * yet resolved here (see F2).
+	 */
 	static bundleLinks(entries: WalkEntry[]): string[] {
 		const links = new Set<string>();
-		const pattern = /\]\((\/[a-z0-9_./-]+\.md)\)/g;
 		for (const entry of entries) {
 			if (entry.isDirectory === true || entry.path.endsWith('.md') === false) {
 				continue;
 			}
 			const content = Fs.readFileSync(entry.path, 'utf-8');
-			let match: RegExpExecArray | null = pattern.exec(content);
-			while (match !== null) {
-				links.add(match[1]);
-				match = pattern.exec(content);
+			for (const target of OkfLink.extractLinkTargets(content)) {
+				if (target.startsWith('/') === true && target.endsWith('.md') === true) {
+					links.add(target);
+				}
 			}
 		}
 		return [...links].sort();

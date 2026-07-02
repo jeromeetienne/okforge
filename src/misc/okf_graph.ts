@@ -82,7 +82,7 @@ export class OkfGraph {
 			const front = OkfGraph.parseFrontmatter(content);
 			const outbound = new Set<string>();
 			const broken: string[] = [];
-			for (const target of OkfGraph.extractLinkTargets(content)) {
+			for (const target of OkfLink.extractLinkTargets(content)) {
 				const resolved = OkfGraph.resolveLink(target, file, root);
 				if (resolved === null) {
 					continue;
@@ -278,18 +278,6 @@ export class OkfGraph {
 		}
 		const exists = Fs.existsSync(Path.join(root, resolved.file)) === true;
 		return { id: resolved.id, file: resolved.file, exists };
-	}
-
-	/** Distinct markdown link targets in `content`, in document order. */
-	static extractLinkTargets(content: string): string[] {
-		const pattern = /\]\(\s*([^)\s]+)/g;
-		const targets: string[] = [];
-		let match: RegExpExecArray | null = pattern.exec(content);
-		while (match !== null) {
-			targets.push(match[1]);
-			match = pattern.exec(content);
-		}
-		return targets;
 	}
 
 	/**

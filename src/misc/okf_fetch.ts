@@ -1,7 +1,6 @@
 import Fs from 'node:fs';
 import Os from 'node:os';
 import Path from 'node:path';
-import { OkfGraph } from './okf_graph.js';
 import { OkfLink } from './okf_link.js';
 
 /** Bundle entry points seeded into every crawl before following links. */
@@ -63,7 +62,7 @@ export class OkfFetch {
 			if (file === 'index.md') {
 				indexFound = true;
 			}
-			for (const target of OkfGraph.extractLinkTargets(content)) {
+			for (const target of OkfLink.extractLinkTargets(content)) {
 				const next = OkfFetch.resolveTarget(target, file);
 				if (next !== null && seen.has(next) === false) {
 					queue.push(next);

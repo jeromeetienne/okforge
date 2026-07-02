@@ -64,20 +64,6 @@ describe('OkfGraph.parseFrontmatter', () => {
 	});
 });
 
-describe('OkfGraph.extractLinkTargets', () => {
-	it('extracts markdown link targets in document order', () => {
-		const content = 'see [a](./a.md) and [b](/b.md) and [ext](https://x.com)';
-		assert.deepEqual(OkfGraph.extractLinkTargets(content), ['./a.md', '/b.md', 'https://x.com']);
-	});
-	// F4 regression (issue #22): the regex extractor also matches links inside
-	// fenced code blocks, producing phantom edges / false dead links. When F4
-	// lands (token-based extraction), flip this to expect [] .
-	it('extracts links inside fenced code blocks (current behaviour)', () => {
-		const content = ['# Example', '```', 'see [x](/foo/bar.md)', '```'].join('\n');
-		assert.deepEqual(OkfGraph.extractLinkTargets(content), ['/foo/bar.md']);
-	});
-});
-
 describe('OkfGraph.resolveLink', () => {
 	const root = makeTree({ 'a.md': 'x', 'dir/b.md': 'y' });
 	after(() => removeTree(root));
