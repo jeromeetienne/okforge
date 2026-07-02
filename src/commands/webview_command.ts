@@ -104,7 +104,19 @@ export class WebviewCommand {
 	 */
 	static async resolveBundle(bundle: string): Promise<{ root: string; name: string }> {
 		if (OkfFetch.isUrl(bundle) === true) {
-			return { root: await OkfFetch.materialize(bundle), name: OkfFetch.bundleName(bundle) };
+			const isTty = process.stderr.isTTY === true;
+			let downloaded = 0;
+			const root = await OkfFetch.materialize(bundle, (progress) => {
+				downloaded = progress.downloaded;
+				if (isTty === true) {
+					process.stderr.write(`\r\x1b[Kdownloading ${bundle} … ${progress.downloaded} file(s) [${progress.current}]`);
+				}
+			});
+			if (isTty === true) {
+				process.stderr.write('\r\x1b[K');
+			}
+			console.log(`downloaded ${downloaded} file(s) from ${bundle}`);
+			return { root, name: OkfFetch.bundleName(bundle) };
 		}
 		const root = Path.resolve(bundle);
 		if (Fs.existsSync(root) === false || Fs.statSync(root).isDirectory() === false) {

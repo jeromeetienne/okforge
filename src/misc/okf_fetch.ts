@@ -6,6 +6,12 @@ import { OkfGraph } from './okf_graph.js';
 /** Bundle entry points seeded into every crawl before following links. */
 const SEED_FILES = ['index.md', 'log.md'];
 
+/** Progress reported by {@link OkfFetch.materialize} after each file is downloaded. */
+export type OkfFetchProgress = {
+	downloaded: number;
+	current: string;
+};
+
 /**
  * Materializes a remote OKF bundle into a local temp directory so the rest of the
  * toolchain — which only reads local directory trees ({@link OkfGraph.build} /
@@ -26,13 +32,18 @@ export class OkfFetch {
 		return /^https?:\/\//i.test(bundle) === true;
 	}
 
-	/** Download the bundle at `url` into a fresh temp directory and return that directory. */
-	static async materialize(url: string): Promise<string> {
+	/**
+	 * Download the bundle at `url` into a fresh temp directory and return that
+	 * directory. `onProgress`, when given, is invoked after each file is written,
+	 * so callers can render download progress.
+	 */
+	static async materialize(url: string, onProgress?: (progress: OkfFetchProgress) => void): Promise<string> {
 		const base = OkfFetch.normalizeBase(url);
 		const outDir = Fs.mkdtempSync(Path.join(Os.tmpdir(), 'okforge-fetch-'));
 		const seen = new Set<string>();
 		const queue = [...SEED_FILES];
 		let indexFound = false;
+		let downloaded = 0;
 		while (queue.length > 0) {
 			const file = queue.shift() as string;
 			if (seen.has(file) === true) {
@@ -44,6 +55,10 @@ export class OkfFetch {
 				continue;
 			}
 			OkfFetch.writeFile(outDir, file, content);
+			downloaded += 1;
+			if (onProgress !== undefined) {
+				onProgress({ downloaded, current: file });
+			}
 			if (file === 'index.md') {
 				indexFound = true;
 			}
