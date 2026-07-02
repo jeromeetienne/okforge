@@ -1,5 +1,6 @@
 import Fs from 'node:fs';
 import Path from 'node:path';
+import { OkfLink } from './okf_link.js';
 import { OkfStore } from './okf_store.js';
 
 /** Reserved filenames that are never concept documents (at any level). */
@@ -267,28 +268,16 @@ export class OkfGraph {
 	 * Resolve a markdown link `target` written in concept `file` to a bundle
 	 * `.md` target. Returns null for anchors, external links, non-`.md` targets,
 	 * and targets that resolve outside the bundle root — none of which are
-	 * concept-graph edges.
+	 * concept-graph edges. Adds an existence check to the shared, fs-free
+	 * {@link OkfLink.resolveBundleLink} core.
 	 */
 	static resolveLink(target: string, file: string, root: string): ResolvedLink | null {
-		const withoutAnchor = target.split('#')[0];
-		if (withoutAnchor === '') {
+		const resolved = OkfLink.resolveBundleLink(target, file);
+		if (resolved === null) {
 			return null;
 		}
-		if (/^[a-z][a-z0-9+.-]*:/i.test(withoutAnchor) === true) {
-			return null;
-		}
-		if (withoutAnchor.endsWith('.md') === false) {
-			return null;
-		}
-		const relative = withoutAnchor.startsWith('/')
-			? withoutAnchor.slice(1)
-			: Path.posix.join(Path.posix.dirname(file), withoutAnchor);
-		const normalized = Path.posix.normalize(relative);
-		if (normalized.startsWith('..') === true || normalized.startsWith('/') === true) {
-			return null;
-		}
-		const exists = Fs.existsSync(Path.join(root, normalized)) === true;
-		return { id: normalized.replace(/\.md$/, ''), file: normalized, exists };
+		const exists = Fs.existsSync(Path.join(root, resolved.file)) === true;
+		return { id: resolved.id, file: resolved.file, exists };
 	}
 
 	/** Distinct markdown link targets in `content`, in document order. */

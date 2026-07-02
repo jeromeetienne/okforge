@@ -2,6 +2,7 @@ import Fs from 'node:fs';
 import Os from 'node:os';
 import Path from 'node:path';
 import { OkfGraph } from './okf_graph.js';
+import { OkfLink } from './okf_link.js';
 
 /** Bundle entry points seeded into every crawl before following links. */
 const SEED_FILES = ['index.md', 'log.md'];
@@ -103,28 +104,11 @@ export class OkfFetch {
 	/**
 	 * Resolve a markdown link `target` found in bundle file `fromFile` to a
 	 * bundle-relative `.md` path, or null when it is not an in-bundle link (anchor,
-	 * external URL, non-`.md` target, or a path escaping the bundle root). Mirrors
-	 * {@link OkfGraph.resolveLink} minus the filesystem existence check.
+	 * external URL, non-`.md` target, or a path escaping the bundle root). Thin
+	 * wrapper over the shared, fs-free {@link OkfLink.resolveBundleLink} core.
 	 */
 	static resolveTarget(target: string, fromFile: string): string | null {
-		const withoutAnchor = target.split('#')[0];
-		if (withoutAnchor === '') {
-			return null;
-		}
-		if (/^[a-z][a-z0-9+.-]*:/i.test(withoutAnchor) === true) {
-			return null;
-		}
-		if (withoutAnchor.endsWith('.md') === false) {
-			return null;
-		}
-		const relative = withoutAnchor.startsWith('/') === true
-			? withoutAnchor.slice(1)
-			: Path.posix.join(Path.posix.dirname(fromFile), withoutAnchor);
-		const normalized = Path.posix.normalize(relative);
-		if (normalized.startsWith('..') === true || normalized.startsWith('/') === true) {
-			return null;
-		}
-		return normalized;
+		return OkfLink.resolveBundleLink(target, fromFile)?.file ?? null;
 	}
 
 	/** GET `url` as UTF-8 text, or null on any non-200 response or network error. */
